@@ -1,0 +1,464 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { Navigation } from "@/components/navigation"
+import { Footer } from "@/components/footer"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Calendar, Clock, Users, Plus, Award, MapPin, TrendingUp } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+
+const daysOfWeek = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+const levels = ["Inicial", "Intermedio", "Avanzado", "Profesional", "Todos"]
+const trainers = ["Ilia Topuria", "Javier Pardo", "Maravilla Alonso"]
+
+export default function GestionClasesPage() {
+  const { user, isAuthenticated, isManager, getAllUsers } = useAuth()
+  const router = useRouter()
+  const [classes, setClasses] = useState<any[]>([])
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [selectedDay, setSelectedDay] = useState("Lunes")
+
+  const [newClass, setNewClass] = useState({
+    name: "",
+    day: "Lunes",
+    time: "18:00",
+    duration: "60",
+    level: "Intermedio",
+    trainer: "Javier Pardo",
+    maxCapacity: 12,
+    intensity: "Media",
+  })
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login")
+      return
+    }
+
+    if (!isManager) {
+      router.push("/")
+      return
+    }
+
+    loadClasses()
+  }, [isAuthenticated, isManager, router])
+
+  const loadClasses = () => {
+    const storedClasses = localStorage.getItem("soroBoxingClasses")
+    if (storedClasses) {
+      setClasses(JSON.parse(storedClasses))
+    } else {
+      const defaultClasses = [
+        {
+          id: 1,
+          day: "Lunes",
+          time: "06:00",
+          duration: 60,
+          name: "Boxeo Técnico Matutino",
+          level: "Avanzado",
+          trainer: "Ilia Topuria",
+          maxCapacity: 8,
+          currentEnrolled: 6,
+          intensity: "Alta",
+        },
+        {
+          id: 2,
+          day: "Lunes",
+          time: "18:00",
+          duration: 60,
+          name: "Principiantes Fundamentos",
+          level: "Inicial",
+          trainer: "Javier Pardo",
+          maxCapacity: 12,
+          currentEnrolled: 8,
+          intensity: "Media",
+        },
+      ]
+      setClasses(defaultClasses)
+      localStorage.setItem("soroBoxingClasses", JSON.stringify(defaultClasses))
+    }
+  }
+
+  const handleAddClass = () => {
+    const endTime = calculateEndTime(newClass.time, Number.parseInt(newClass.duration))
+    const classToAdd = {
+      id: Date.now(),
+      day: newClass.day,
+      time: newClass.time,
+      duration: Number.parseInt(newClass.duration),
+      name: newClass.name,
+      level: newClass.level,
+      trainer: newClass.trainer,
+      maxCapacity: newClass.maxCapacity,
+      currentEnrolled: 0,
+      intensity: newClass.intensity,
+      timeRange: `${newClass.time} - ${endTime}`,
+    }
+
+    const updatedClasses = [...classes, classToAdd]
+    setClasses(updatedClasses)
+    localStorage.setItem("soroBoxingClasses", JSON.stringify(updatedClasses))
+
+    setShowAddForm(false)
+    setNewClass({
+      name: "",
+      day: "Lunes",
+      time: "18:00",
+      duration: "60",
+      level: "Intermedio",
+      trainer: "Javier Pardo",
+      maxCapacity: 12,
+      intensity: "Media",
+    })
+  }
+
+  const calculateEndTime = (startTime: string, durationMinutes: number) => {
+    const [hours, minutes] = startTime.split(":").map(Number)
+    const totalMinutes = hours * 60 + minutes + durationMinutes
+    const endHours = Math.floor(totalMinutes / 60) % 24
+    const endMinutes = totalMinutes % 60
+    return `${String(endHours).padStart(2, "0")}:${String(endMinutes).padStart(2, "0")}`
+  }
+
+  const allUsersData = getAllUsers()
+  const getUsersInClass = (classId: number) => {
+    return allUsersData.filter((u) => u.enrolledClasses.includes(classId))
+  }
+
+  if (!user || !isManager) {
+    return null
+  }
+
+  const filteredClasses = classes.filter((c) => c.day === selectedDay)
+  const totalClasses = classes.length
+  const totalCapacity = classes.reduce((sum, c) => sum + c.maxCapacity, 0)
+  const totalEnrolled = classes.reduce((sum, c) => sum + c.currentEnrolled, 0)
+  const averageOccupancy = totalCapacity > 0 ? Math.round((totalEnrolled / totalCapacity) * 100) : 0
+
+  return (
+    <main className="min-h-screen bg-background">
+      <Navigation />
+
+      <section className="pt-32 pb-16 bg-gradient-to-b from-primary to-primary/95 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl animate-float" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-6 py-2 bg-accent/20 backdrop-blur-sm border border-accent/50 rounded-full mb-6">
+              <Calendar className="w-4 h-4 text-accent" />
+              <span className="text-accent font-mono text-sm tracking-widest">GESTIÓN DE CLASES</span>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-4">
+              ADMINISTRACIÓN <span className="text-accent">HORARIOS</span>
+            </h1>
+            <p className="text-lg text-primary-foreground/80 font-mono">
+              Crea, edita y gestiona el horario de clases del gimnasio
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto mt-12">
+            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+              <Calendar className="w-8 h-8 text-accent mx-auto mb-3" />
+              <div className="text-4xl font-bold text-accent mb-2">{totalClasses}</div>
+              <div className="text-sm font-mono text-primary-foreground/70">Clases Semanales</div>
+            </div>
+            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+              <Users className="w-8 h-8 text-accent mx-auto mb-3" />
+              <div className="text-4xl font-bold text-accent mb-2">{totalCapacity}</div>
+              <div className="text-sm font-mono text-primary-foreground/70">Aforo Total</div>
+            </div>
+            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+              <TrendingUp className="w-8 h-8 text-accent mx-auto mb-3" />
+              <div className="text-4xl font-bold text-accent mb-2">{totalEnrolled}</div>
+              <div className="text-sm font-mono text-primary-foreground/70">Plazas Ocupadas</div>
+            </div>
+            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+              <Award className="w-8 h-8 text-accent mx-auto mb-3" />
+              <div className="text-4xl font-bold text-accent mb-2">{averageOccupancy}%</div>
+              <div className="text-sm font-mono text-primary-foreground/70">Ocupación Media</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-8 bg-muted/50 border-b border-border sticky top-20 z-40 backdrop-blur-lg">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            <div className="flex flex-wrap gap-3">
+              {daysOfWeek.map((day) => (
+                <Button
+                  key={day}
+                  variant={selectedDay === day ? "default" : "outline"}
+                  onClick={() => setSelectedDay(day)}
+                  className={`font-mono tracking-wide transition-all ${
+                    selectedDay === day
+                      ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                      : "border-2 hover:border-accent"
+                  }`}
+                >
+                  {day}
+                </Button>
+              ))}
+            </div>
+            <Button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              AÑADIR CLASE
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {showAddForm && (
+        <section className="py-8 bg-accent/5 border-b border-accent/20">
+          <div className="container mx-auto px-4">
+            <Card className="max-w-4xl mx-auto p-8 border-2 border-accent">
+              <h3 className="text-2xl font-bold text-foreground mb-6">Añadir Nueva Clase</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <Label htmlFor="name" className="text-sm font-mono">
+                    NOMBRE DE LA CLASE
+                  </Label>
+                  <Input
+                    id="name"
+                    value={newClass.name}
+                    onChange={(e) => setNewClass({ ...newClass, name: e.target.value })}
+                    placeholder="Ej: Boxeo Avanzado"
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="day" className="text-sm font-mono">
+                    DÍA
+                  </Label>
+                  <select
+                    id="day"
+                    value={newClass.day}
+                    onChange={(e) => setNewClass({ ...newClass, day: e.target.value })}
+                    className="w-full mt-2 h-10 px-3 rounded-md border border-input bg-background"
+                  >
+                    {daysOfWeek.map((day) => (
+                      <option key={day} value={day}>
+                        {day}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="time" className="text-sm font-mono">
+                    HORA DE INICIO
+                  </Label>
+                  <Input
+                    id="time"
+                    type="time"
+                    value={newClass.time}
+                    onChange={(e) => setNewClass({ ...newClass, time: e.target.value })}
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="duration" className="text-sm font-mono">
+                    DURACIÓN (minutos)
+                  </Label>
+                  <Input
+                    id="duration"
+                    type="number"
+                    value={newClass.duration}
+                    onChange={(e) => setNewClass({ ...newClass, duration: e.target.value })}
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="level" className="text-sm font-mono">
+                    NIVEL
+                  </Label>
+                  <select
+                    id="level"
+                    value={newClass.level}
+                    onChange={(e) => setNewClass({ ...newClass, level: e.target.value })}
+                    className="w-full mt-2 h-10 px-3 rounded-md border border-input bg-background"
+                  >
+                    {levels.map((level) => (
+                      <option key={level} value={level}>
+                        {level}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="trainer" className="text-sm font-mono">
+                    ENTRENADOR
+                  </Label>
+                  <select
+                    id="trainer"
+                    value={newClass.trainer}
+                    onChange={(e) => setNewClass({ ...newClass, trainer: e.target.value })}
+                    className="w-full mt-2 h-10 px-3 rounded-md border border-input bg-background"
+                  >
+                    {trainers.map((trainer) => (
+                      <option key={trainer} value={trainer}>
+                        {trainer}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <Label htmlFor="capacity" className="text-sm font-mono">
+                    AFORO MÁXIMO
+                  </Label>
+                  <Input
+                    id="capacity"
+                    type="number"
+                    value={newClass.maxCapacity}
+                    onChange={(e) => setNewClass({ ...newClass, maxCapacity: Number.parseInt(e.target.value) })}
+                    className="mt-2"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="intensity" className="text-sm font-mono">
+                    INTENSIDAD
+                  </Label>
+                  <select
+                    id="intensity"
+                    value={newClass.intensity}
+                    onChange={(e) => setNewClass({ ...newClass, intensity: e.target.value })}
+                    className="w-full mt-2 h-10 px-3 rounded-md border border-input bg-background"
+                  >
+                    <option value="Baja">Baja</option>
+                    <option value="Media">Media</option>
+                    <option value="Alta">Alta</option>
+                    <option value="Muy Alta">Muy Alta</option>
+                  </select>
+                </div>
+              </div>
+              <div className="flex gap-4 mt-8">
+                <Button
+                  onClick={handleAddClass}
+                  className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
+                >
+                  GUARDAR CLASE
+                </Button>
+                <Button onClick={() => setShowAddForm(false)} variant="outline" className="flex-1 font-mono">
+                  CANCELAR
+                </Button>
+              </div>
+            </Card>
+          </div>
+        </section>
+      )}
+
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-3xl font-bold text-foreground mb-8">
+              Clases del {selectedDay} ({filteredClasses.length})
+            </h2>
+
+            {filteredClasses.length === 0 ? (
+              <div className="text-center py-20">
+                <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
+                <p className="text-xl text-muted-foreground font-mono">No hay clases programadas para este día</p>
+              </div>
+            ) : (
+              <div className="grid gap-6">
+                {filteredClasses.map((classItem) => {
+                  const enrolledUsers = getUsersInClass(classItem.id)
+                  const percentage = (classItem.currentEnrolled / classItem.maxCapacity) * 100
+
+                  return (
+                    <Card key={classItem.id} className="p-6 border-2 hover:border-accent transition-all">
+                      <div className="flex flex-col lg:flex-row gap-6">
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="text-2xl font-bold text-foreground mb-2">{classItem.name}</h3>
+                              <div className="flex flex-wrap gap-2">
+                                <Badge variant="outline" className="border-accent text-accent">
+                                  {classItem.level}
+                                </Badge>
+                                <Badge variant="secondary">{classItem.intensity}</Badge>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div className="flex items-center gap-2 text-muted-foreground font-mono">
+                              <Clock className="w-4 h-4 text-accent" />
+                              {classItem.time} ({classItem.duration}min)
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground font-mono">
+                              <Award className="w-4 h-4 text-accent" />
+                              {classItem.trainer}
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground font-mono">
+                              <Users className="w-4 h-4 text-accent" />
+                              {classItem.currentEnrolled}/{classItem.maxCapacity} plazas
+                            </div>
+                            <div className="flex items-center gap-2 text-muted-foreground font-mono">
+                              <MapPin className="w-4 h-4 text-accent" />
+                              Soro Boxing Academy
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-xs font-mono text-muted-foreground">OCUPACIÓN</span>
+                              <span className="text-sm font-mono font-bold text-accent">{Math.round(percentage)}%</span>
+                            </div>
+                            <div className="h-3 bg-muted rounded-full overflow-hidden border border-border">
+                              <div className="h-full bg-accent transition-all" style={{ width: `${percentage}%` }} />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="lg:w-96 border-l border-border pl-6">
+                          <h4 className="text-sm font-mono tracking-wider text-muted-foreground mb-4 flex items-center gap-2">
+                            <Users className="w-4 h-4 text-accent" />
+                            ALUMNOS INSCRITOS ({enrolledUsers.length})
+                          </h4>
+                          {enrolledUsers.length > 0 ? (
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                              {enrolledUsers.map((enrolledUser) => (
+                                <div
+                                  key={enrolledUser.id}
+                                  className="flex items-center gap-3 p-3 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                                >
+                                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                                    <span className="text-sm font-bold text-accent">
+                                      {enrolledUser.name.charAt(0).toUpperCase()}
+                                    </span>
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-medium text-foreground">{enrolledUser.name}</p>
+                                    <p className="text-xs text-muted-foreground truncate">{enrolledUser.email}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground italic">No hay alumnos inscritos</p>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </main>
+  )
+}

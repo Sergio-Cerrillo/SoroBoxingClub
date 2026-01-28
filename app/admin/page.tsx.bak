@@ -1,0 +1,389 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Spinner } from "@/components/ui/spinner"
+import { UserPlus, Trash2, Copy, Check } from "lucide-react"
+
+interface User {
+    id: string
+    dni: string
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    phone: string | null
+    role: string
+    created_at: string
+}
+
+export default function AdminPage() {
+    const [users, setUsers] = useState<User[]>([])
+    const [loading, setLoading] = useState(true)
+    const [creating, setCreating] = useState(false)
+    const [deleting, setDeleting] = useState<string | null>(null)
+
+    // Form state
+    const [dni, setDni] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
+
+    // Success state
+    const [generatedPin, setGeneratedPin] = useState<string | null>(null)
+    const [pinCopied, setPinCopied] = useState(false)
+
+    // Delete confirmation
+    const [userToDelete, setUserToDelete] = useState<User | null>(null)
+
+    // Load users
+    useEffect(() => {
+        loadUsers()
+    }, [])
+
+    const loadUsers = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch("/api/admin/users")
+            const data = await response.json()
+
+            if (response.ok) {
+                setUsers(data.users || [])
+            } else {
+                alert(data.error || "Error al cargar usuarios")
+            }
+        } catch (error) {
+            console.error("Error:", error)
+            alert("Error al cargar usuarios")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleCreateUser = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        if (!dni.trim()) {
+            alert("El DNI es obligatorio")
+            return
+        }
+
+        setCreating(true)
+
+        try {
+            const response = await fetch("/api/admin/create-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    dni: dni.trim(),
+                    first_name: firstName.trim() || undefined,
+                    last_name: lastName.trim() || undefined,
+                    email: email.trim() || undefined,
+                    phone: phone.trim() || undefined,
+                }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                // Mostrar PIN generado
+                setGeneratedPin(data.pin)
+
+                // Reset form
+                setDni("")
+                setFirstName("")
+                setLastName("")
+                setEmail("")
+                setPhone("")
+
+                // Recargar lista
+                await loadUsers()
+            } else {
+                alert(data.error || "Error al crear usuario")
+            }
+        } catch (error) {
+            console.error("Error:", error)
+            alert("Error al crear usuario")
+        } finally {
+            setCreating(false)
+        }
+    }
+
+    const handleDeleteUser = async () => {
+        if (!userToDelete) return
+
+        setDeleting(userToDelete.id)
+
+        try {
+            const response = await fetch("/api/admin/delete-user", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: userToDelete.id }),
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                // Recargar lista
+                await loadUsers()
+            } else {
+                alert(data.error || "Error al eliminar usuario")
+            }
+        } catch (error) {
+            console.error("Error:", error)
+            alert("Error al eliminar usuario")
+        } finally {
+            setDeleting(null)
+            setUserToDelete(null)
+        }
+    }
+
+    const copyPinToClipboard = () => {
+        if (generatedPin) {
+            navigator.clipboard.writeText(generatedPin)
+            setPinCopied(true)
+            setTimeout(() => setPinCopied(false), 2000)
+        }
+    }
+
+    return (
+        <div className="container mx-auto p-4 md:p-6 max-w-7xl">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold mb-2">Panel de Administración</h1>
+                <p className="text-muted-foreground">Gestión de usuarios del gimnasio</p>
+            </div>
+
+            {/* PIN Generated Success Message */}
+            {generatedPin && (
+                <Card className="mb-6 p-6 bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-1">
+                            <h3 className="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">
+                                ¡Usuario creado correctamente!
+                            </h3>
+                            <p className="text-sm text-green-800 dark:text-green-200 mb-3">
+                                PIN generado (compártelo con el usuario, solo se muestra una vez):
+                            </p>
+                            <div className="flex items-center gap-2">
+                                <code className="text-2xl font-mono font-bold bg-white dark:bg-black px-4 py-2 rounded border border-green-300 dark:border-green-700">
+                                    {generatedPin}
+                                </code>
+                                <Button
+                                    onClick={copyPinToClipboard}
+                                    variant="outline"
+                                    size="sm"
+                                    className="gap-2"
+                                >
+                                    {pinCopied ? (
+                                        <>
+                                            <Check className="h-4 w-4" />
+                                            Copiado
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Copy className="h-4 w-4" />
+                                            Copiar
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        </div>
+                        <Button
+                            onClick={() => setGeneratedPin(null)}
+                            variant="ghost"
+                            size="sm"
+                        >
+                            ✕
+                        </Button>
+                    </div>
+                </Card>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Create User Form */}
+                <Card className="p-6">
+                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <UserPlus className="h-5 w-5" />
+                        Crear Usuario
+                    </h2>
+
+                    <form onSubmit={handleCreateUser} className="space-y-4">
+                        <div>
+                            <Label htmlFor="dni">DNI *</Label>
+                            <Input
+                                id="dni"
+                                type="text"
+                                placeholder="12345678A"
+                                value={dni}
+                                onChange={(e) => setDni(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="firstName">Nombre</Label>
+                            <Input
+                                id="firstName"
+                                type="text"
+                                placeholder="Juan"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="lastName">Apellidos</Label>
+                            <Input
+                                id="lastName"
+                                type="text"
+                                placeholder="García López"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="usuario@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="phone">Teléfono</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="+34 600 000 000"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </div>
+
+                        <Button type="submit" className="w-full" disabled={creating}>
+                            {creating ? (
+                                <>
+                                    <Spinner className="mr-2" />
+                                    Creando...
+                                </>
+                            ) : (
+                                <>
+                                    <UserPlus className="mr-2 h-4 w-4" />
+                                    Crear Usuario
+                                </>
+                            )}
+                        </Button>
+                    </form>
+
+                    <p className="text-xs text-muted-foreground mt-4">
+                        * El PIN se genera automáticamente y se mostrará una sola vez.
+                    </p>
+                </Card>
+
+                {/* Users List */}
+                <Card className="p-6 lg:col-span-2">
+                    <h2 className="text-xl font-semibold mb-4">Usuarios Activos</h2>
+
+                    {loading ? (
+                        <div className="flex items-center justify-center py-12">
+                            <Spinner className="h-8 w-8" />
+                        </div>
+                    ) : users.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">
+                            No hay usuarios registrados
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="border-b">
+                                        <th className="text-left py-3 px-2 font-semibold text-sm">DNI</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-sm">Nombre</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-sm">Email</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-sm">Teléfono</th>
+                                        <th className="text-left py-3 px-2 font-semibold text-sm">Fecha Alta</th>
+                                        <th className="text-right py-3 px-2 font-semibold text-sm">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {users.map((user) => (
+                                        <tr key={user.id} className="border-b hover:bg-muted/50">
+                                            <td className="py-3 px-2 text-sm font-mono">{user.dni}</td>
+                                            <td className="py-3 px-2 text-sm">
+                                                {[user.first_name, user.last_name].filter(Boolean).join(" ") || "-"}
+                                            </td>
+                                            <td className="py-3 px-2 text-sm">{user.email || "-"}</td>
+                                            <td className="py-3 px-2 text-sm">{user.phone || "-"}</td>
+                                            <td className="py-3 px-2 text-sm">
+                                                {new Date(user.created_at).toLocaleDateString()}
+                                            </td>
+                                            <td className="py-3 px-2 text-right">
+                                                <Button
+                                                    onClick={() => setUserToDelete(user)}
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    disabled={deleting === user.id}
+                                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                                >
+                                                    {deleting === user.id ? (
+                                                        <Spinner className="h-4 w-4" />
+                                                    ) : (
+                                                        <Trash2 className="h-4 w-4" />
+                                                    )}
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </Card>
+            </div>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog open={!!userToDelete} onOpenChange={() => setUserToDelete(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>¿Eliminar usuario?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            ¿Estás seguro de que quieres eliminar al usuario{" "}
+                            <strong>{userToDelete?.dni}</strong>? Esta acción marcará al usuario como
+                            eliminado y revocará todas sus sesiones activas.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDeleteUser}
+                            className="bg-red-600 hover:bg-red-700"
+                        >
+                            Eliminar
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
+    )
+}
