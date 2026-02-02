@@ -12,7 +12,7 @@ export function CTASection() {
   return (
     <section className="py-24 lg:py-32 bg-black relative overflow-hidden">
       {/* Imagen de fondo con parallax */}
-      <ParallaxScale scaleRange={[1, 1.15]}>
+      <ParallaxScale scale={[1, 1.15]}>
         <div className="absolute inset-0 z-0">
           <Image
             src="/_ (2).jpeg"

@@ -31,7 +31,6 @@ export async function middleware(request: NextRequest) {
     '/horarios',
     '/combates',
     '/normas',
-    '/videos',
     '/clases'
   ]
   const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
