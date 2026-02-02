@@ -3,70 +3,63 @@ import { Footer } from "@/components/footer"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Check, Zap, Crown, Sparkles } from "lucide-react"
+import { Check, Zap, Crown, Sparkles, User, Users2, Calendar, Apple } from "lucide-react"
+import Link from "next/link"
 
 export default function CuotasPage() {
   const planes = [
     {
-      nombre: "BÁSICO",
-      precio: "49",
-      periodo: "mes",
-      descripcion: "Perfecto para empezar tu viaje en el boxeo",
+      nombre: "SOLO PESAS",
+      precio: "35",
+      periodo: "mes + 25€ de matrícula",
+      descripcion: "Perfecto para mantenerte en forma en nuestra zona de pesas.",
       icon: Zap,
       caracteristicas: [
-        "Acceso al gimnasio (horario limitado)",
-        "3 clases grupales por semana",
-        "Uso de equipamiento básico",
+        "Acceso al gimnasio (horario ilimitado)",
+        "Uso de equipamiento de pesas y máquinas",
+        "Vestuarios y duchas",
+      ],
+      popular: false,
+    },
+    {
+      nombre: "PESAS Y BOXEO",
+      precio: "50",
+      periodo: "mes + 25€ de matrícula",
+      descripcion: "Combina entrenamiento de pesas y clases de boxeo.",
+      icon: Crown,
+      caracteristicas: [
+        "Todo lo incluido en 'Solo Pesas'",
+        "Clases grupales ilimitadas de boxeo",
+        "Acceso días de combate y sparring",
+        "Asesoramiento inicial y plan de entrenamiento básico",
+        "uso de equipamiento de pesas y máquinas",
+        "Vestuarios y duchas"
+      ],
+      popular: true,
+    },
+    {
+      nombre: "CLASES FUNCIONALES DIRIGIDAS",
+      precio: "50",
+      periodo: "mes + 25€ de matrícula",
+      descripcion: "Alternativa al boxeo, con clases funcionales dirigidas.",
+      icon: Sparkles,
+      caracteristicas: [
+        "Todo lo incluido en 'Solo Pesas'",
+        "Acceso a todas las clases funcionales dirigidas",
+        "Uso de equipamiento de pesas y máquinas",
         "Vestuarios y duchas",
         "Asesoramiento inicial",
       ],
       popular: false,
     },
-    {
-      nombre: "PRO",
-      precio: "89",
-      periodo: "mes",
-      descripcion: "Para boxeadores comprometidos y serios",
-      icon: Crown,
-      caracteristicas: [
-        "Acceso ilimitado al gimnasio",
-        "Clases grupales ilimitadas",
-        "2 sesiones de entrenamiento personal/mes",
-        "Acceso a videos técnicos premium",
-        "Plan de nutrición básico",
-        "Prioridad en eventos y combates",
-        "Descuento en merchandising",
-      ],
-      popular: true,
-    },
-    {
-      nombre: "ELITE",
-      precio: "149",
-      periodo: "mes",
-      descripcion: "Entrenamiento de campeones, atención VIP",
-      icon: Sparkles,
-      caracteristicas: [
-        "Todo lo incluido en PRO",
-        "Entrenamiento personal ilimitado",
-        "Sesiones 1-a-1 con entrenadores elite",
-        "Plan de nutrición personalizado",
-        "Análisis de rendimiento mensual",
-        "Preparación para competiciones",
-        "Acceso prioritario a eventos",
-        "Merchandising exclusivo incluido",
-        "Locker privado",
-      ],
-      popular: false,
-    },
+
   ]
 
   const serviciosExtra = [
-    { servicio: "Clase individual (1 hora)", precio: "35€" },
-    { servicio: "Pack 5 clases individuales", precio: "150€" },
-    { servicio: "Pack 10 clases individuales", precio: "280€" },
-    { servicio: "Preparación para combate (mes)", precio: "200€" },
-    { servicio: "Análisis de video técnico", precio: "45€" },
-    { servicio: "Plan nutricional personalizado", precio: "60€" },
+    { servicio: "Clase individual (1 hora)", icon: User, descripcion: "Entrenamiento personalizado 1 a 1 adaptado a tus objetivos" },
+    { servicio: "Pack 5 clases individuales", icon: Users2, descripcion: "Mejora tu técnica con sesiones personalizadas", destacado: true },
+    { servicio: "Pack 10 clases individuales", icon: Calendar, descripcion: "Máxima dedicación para resultados profesionales", destacado: true },
+    { servicio: "Plan nutricional personalizado", icon: Apple, descripcion: "Optimiza tu rendimiento con una dieta personalizada" },
   ]
 
   return (
@@ -74,14 +67,32 @@ export default function CuotasPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 bg-primary">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge className="mb-4 bg-accent text-accent-foreground">PRECIOS</Badge>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-primary-foreground">
-              Elige tu <span className="text-accent">Plan</span>
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('planes.jpg')" }}
+        />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/60" />
+
+        {/* Gradient overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-black" />
+
+        <div className="container mx-auto px-4 z-10 pt-20">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-flex items-center px-6 py-3 backdrop-blur-md border border-accent/30 rounded-full mb-8">
+              <span className="text-accent font-mono text-xs md:text-sm tracking-[0.2em] uppercase font-medium">
+                PRECIOS
+              </span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-primary-foreground tracking-tight leading-tight">
+              ELIGE TU{" "}
+              <span className="animate-shimmer bg-gradient-to-r from-accent via-yellow-300 to-accent bg-[length:200%_auto] bg-clip-text text-transparent">
+                PLAN
+              </span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-lg md:text-xl lg:text-2xl text-primary-foreground/90 leading-relaxed font-light max-w-3xl mx-auto">
               Planes diseñados para todos los niveles. Sin permanencia, cancela cuando quieras.
             </p>
           </div>
@@ -89,7 +100,7 @@ export default function CuotasPage() {
       </section>
 
       {/* Planes de Cuotas */}
-      <section className="py-20">
+      <section className="py-20 lg:py-32 bg-black">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {planes.map((plan, index) => {
@@ -97,9 +108,8 @@ export default function CuotasPage() {
               return (
                 <Card
                   key={index}
-                  className={`relative overflow-hidden p-8 ${
-                    plan.popular ? "border-accent border-2 shadow-xl scale-105" : "border-border"
-                  }`}
+                  className={`relative overflow-hidden p-8 bg-zinc-900 ${plan.popular ? "border-accent border-2 shadow-2xl shadow-accent/50 scale-105" : "border-accent/30 shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/50"
+                    } transition-all duration-300`}
                 >
                   {plan.popular && (
                     <div className="absolute top-0 right-0 bg-accent text-accent-foreground px-4 py-1 text-sm font-mono">
@@ -109,14 +119,14 @@ export default function CuotasPage() {
 
                   <div className="mb-6">
                     <IconComponent className="w-12 h-12 text-accent mb-4" />
-                    <h3 className="text-2xl font-bold mb-2 font-mono">{plan.nombre}</h3>
-                    <p className="text-muted-foreground text-sm">{plan.descripcion}</p>
+                    <h3 className="text-2xl font-bold mb-2 font-mono text-white tracking-wider">{plan.nombre}</h3>
+                    <p className="text-gray-400 text-sm">{plan.descripcion}</p>
                   </div>
 
                   <div className="mb-6">
                     <div className="flex items-baseline gap-2">
                       <span className="text-5xl font-bold text-accent">{plan.precio}€</span>
-                      <span className="text-muted-foreground">/ {plan.periodo}</span>
+                      <span className="text-gray-400">/ {plan.periodo}</span>
                     </div>
                   </div>
 
@@ -124,20 +134,20 @@ export default function CuotasPage() {
                     {plan.caracteristicas.map((caracteristica, i) => (
                       <li key={i} className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-muted-foreground">{caracteristica}</span>
+                        <span className="text-sm text-gray-300">{caracteristica}</span>
                       </li>
                     ))}
                   </ul>
 
                   <Button
-                    className={`w-full font-mono ${
-                      plan.popular
-                        ? "bg-accent text-accent-foreground hover:bg-accent/90"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    }`}
+                    className={`w-full font-mono ${plan.popular
+                      ? "bg-accent text-accent-foreground hover:bg-accent/90"
+                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      }`}
                     size="lg"
+                    asChild
                   >
-                    COMENZAR AHORA
+                    <Link href="/contacto">COMENZAR AHORA</Link>
                   </Button>
                 </Card>
               )
@@ -147,34 +157,66 @@ export default function CuotasPage() {
       </section>
 
       {/* Servicios Extra */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-20 lg:py-32 bg-black border-t border-accent/20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">
-                Servicios <span className="text-accent">Extra</span>
+              <div className="inline-block px-6 py-2 bg-accent/10 border border-accent/30 rounded-full mb-6">
+                <span className="text-accent font-mono text-xs tracking-[0.2em] uppercase font-medium">
+                  Complementos
+                </span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+                SERVICIOS <span className="text-accent">ADICIONALES</span>
               </h2>
-              <p className="text-muted-foreground">Complementa tu entrenamiento con servicios adicionales</p>
+              <p className="text-gray-400 text-lg font-mono">Lleva tu entrenamiento al siguiente nivel</p>
             </div>
 
-            <Card className="p-8">
-              <div className="space-y-4">
-                {serviciosExtra.map((item, index) => (
-                  <div
+            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+              {serviciosExtra.map((item, index) => {
+                const IconComponent = item.icon
+                return (
+                  <Card
                     key={index}
-                    className="flex items-center justify-between py-4 border-b border-border last:border-b-0"
+                    className="group p-8 bg-zinc-900 border-2 border-accent/30 hover:border-accent shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/40 transition-all duration-300 hover:-translate-y-1"
                   >
-                    <span className="text-foreground font-medium">{item.servicio}</span>
-                    <span className="text-accent font-bold text-lg">{item.precio}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+                    {item.destacado && (
+                      <Badge className="absolute top-4 right-4 bg-accent/20 text-accent border-accent/30">
+                        POPULAR
+                      </Badge>
+                    )}
 
-            <div className="mt-8 text-center">
-              <p className="text-sm text-muted-foreground">
-                * Todos los precios incluyen IVA. Descuentos disponibles para estudiantes y familias.
-              </p>
+                    <div className="text-center mb-6">
+                      <div className="w-16 h-16 bg-accent/20 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:scale-110 transition-all duration-300">
+                        <IconComponent className="w-8 h-8 text-accent group-hover:text-accent-foreground" />
+                      </div>
+                      <h3 className="text-white font-bold text-xl mb-3 font-mono">{item.servicio}</h3>
+                      <p className="text-gray-400 text-sm leading-relaxed">{item.descripcion}</p>
+                    </div>
+
+                    <Link href="/contacto" className="block">
+                      <Button
+                        className="w-full bg-black border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground hover:border-accent font-mono transition-all duration-300"
+                      >
+                        Infórmate de esto
+                      </Button>
+                    </Link>
+                  </Card>
+                )
+              })}
+            </div>
+
+            {/* CTA adicional */}
+            <div className="mt-12 text-center">
+              <p className="text-gray-400 mb-4 font-mono">¿Necesitas más información sobre nuestros servicios?</p>
+              <Link href="/contacto">
+                <Button
+                  size="lg"
+                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
+                >
+                  Contacta con nosotros
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

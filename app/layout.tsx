@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Playfair_Display, Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/auth-context"
+import { MotionProvider } from "@/components/motion"
 import "./globals.css"
 
 const playfairDisplay = Playfair_Display({ subsets: ["latin"], variable: "--font-sans" })
@@ -40,7 +41,9 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${playfairDisplay.variable} ${inter.variable} font-sans antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+        <MotionProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </MotionProvider>
         <Analytics />
       </body>
     </html>

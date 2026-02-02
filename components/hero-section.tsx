@@ -1,103 +1,169 @@
 "use client"
 
+import { m } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Play } from "lucide-react"
+import { ArrowRight, Volume2, VolumeX } from "lucide-react"
 import Link from "next/link"
+import { Reveal, TextReveal, ParallaxOpacity } from "@/components/motion"
+import { motionConfig } from "@/lib/motion/config"
+import { useState, useRef, useEffect } from "react"
 
 export function HeroSection() {
+  const [isMuted, setIsMuted] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  const toggleMute = () => {
+    if (iframeRef.current) {
+      const iframe = iframeRef.current
+      const newMutedState = !isMuted
+      setIsMuted(newMutedState)
+
+      // Cambiar la URL del iframe para activar/desactivar el mute
+      const currentSrc = iframe.src
+      iframe.src = currentSrc.replace(
+        newMutedState ? 'mute=0' : 'mute=1',
+        newMutedState ? 'mute=1' : 'mute=0'
+      )
+    }
+  }
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-primary/80 z-10" />
-        <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-20">
-          <source src="/placeholder.mp4?height=1080&width=1920&query=boxing+training+intense" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-transparent to-primary/90 z-10" />
-      </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
+      <ParallaxOpacity range={[0.3, 1]}>
+        <div className="absolute inset-0 z-0">
+          {/* YouTube video background */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden">
+            <iframe
+              ref={iframeRef}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-60 scale-[1.5]"
+              style={{
+                border: 'none',
+                width: '177.77777778vh',
+                height: '56.25vw',
+                minWidth: '100vw',
+                minHeight: '100vh'
+              }}
+              src="https://www.youtube.com/embed/J_PQCSPZvWk?autoplay=1&mute=0&controls=0&loop=1&playlist=J_PQCSPZvWk&modestbranding=1&showinfo=0&rel=0&disablekb=1&fs=0&iv_load_policy=3&playsinline=1&enablejsapi=0"
+              title="Background video"
+              allow="autoplay; encrypted-media"
+            />
+          </div>
+          {/* Degradado inferior a negro */}
+          <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-b from-transparent via-black/70 to-black z-10" />
+        </div>
+      </ParallaxOpacity>
 
       {/* Content */}
       <div className="container mx-auto px-4 lg:px-8 z-20 text-center pt-20">
+        {/* Botón de sonido */}
+        <m.button
+          onClick={toggleMute}
+          className="fixed top-24 right-8 z-50 p-4 rounded-full bg-accent/90 hover:bg-accent text-accent-foreground backdrop-blur-sm shadow-lg transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+        </m.button>
+
         <div className="max-w-6xl mx-auto">
-          <div className="animate-fade-in-up">
-            {/* Badge */}
-            <div className="inline-flex items-center px-6 py-3 bg-primary/30 backdrop-blur-md border border-accent/30 rounded-full mb-8">
+          {/* Badge con reveal */}
+          <Reveal direction="down" delay={0.1} duration="fast">
+            <div className="inline-flex items-center px-6 py-3 backdrop-blur-md border border-accent/30 rounded-full mb-8">
               <span className="text-accent font-mono text-xs md:text-sm tracking-[0.2em] uppercase font-medium">
-                Academia de Élite Mundial
+                Aquí, hoy y ahora.
               </span>
             </div>
+          </Reveal>
 
-            {/* Main Heading */}
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-primary-foreground mb-8 tracking-tight leading-[0.95]">
-              ENTRENA COMO UN
-              <span className="text-accent block mt-4 animate-shimmer bg-gradient-to-r from-accent via-yellow-300 to-accent bg-[length:200%_auto] bg-clip-text text-transparent">
+          {/* Main Heading con TextReveal word-by-word */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 tracking-tight leading-tight">
+            <span className="text-primary-foreground">
+              <TextReveal delay={0.2} staggerDelay={0.04}>
+                ENTRENA COMO UN
+              </TextReveal>
+            </span>
+            {" "}
+            <span className="text-accent">
+              <TextReveal delay={0.5} staggerDelay={0.04}>
                 CAMPEÓN
+              </TextReveal>
+            </span>
+            <span className="block mt-2">
+              <span className="text-primary-foreground">
+                <TextReveal delay={0.8} staggerDelay={0.04}>
+                  PELEA COMO UNA
+                </TextReveal>
               </span>
-            </h1>
+              {" "}
+              <span className="text-accent">
+                <TextReveal delay={1.1} staggerDelay={0.04}>
+                  LEYENDA
+                </TextReveal>
+              </span>
+            </span>
+          </h1>
 
-            {/* Subtitle */}
+          {/* Subtitle */}
+          <Reveal direction="up" delay={1.4} duration="normal">
             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-primary-foreground/90 mb-12 font-light max-w-4xl mx-auto leading-relaxed px-4">
-              Descubre el arte del boxeo con entrenadores de élite mundial.
-              <span className="block mt-2 text-accent/90">Fuerza, técnica y disciplina en cada golpe.</span>
+              Descubre el arte del boxeo en Soro Boxing Club.
+              <span className="block mt-2 text-accent/90">Fuerza, técnica y disciplina.</span>
             </p>
+          </Reveal>
 
-            {/* CTA Buttons - Mejor espaciado y diseño más elegante */}
+          {/* CTA Button con animación especial */}
+          <Reveal direction="scale" delay={1.7} duration="normal">
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-20 px-4">
-              <Link href="/clases" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-2xl shadow-accent/30 hover:scale-[1.02] transition-all duration-300"
+              <Link href="/contacto" className="w-full sm:w-auto">
+                <m.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={motionConfig.easing.spring}
                 >
-                  RESERVAR CLASE
-                  <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" size={20} />
-                </Button>
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-2xl shadow-accent/30"
+                  >
+                    Empecemos
+                    <m.span
+                      className="ml-3 inline-block"
+                      initial={{ x: 0 }}
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <ArrowRight size={20} />
+                    </m.span>
+                  </Button>
+                </m.div>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto border-2 border-primary-foreground/80 text-primary-foreground hover:bg-primary-foreground/10 hover:border-accent text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider bg-transparent backdrop-blur-sm group transition-all duration-300"
-              >
-                <Play className="mr-3 group-hover:scale-110 transition-transform" size={20} />
-                VER VIDEO
-              </Button>
             </div>
-          </div>
-
-          {/* Stats - Grid mejorado con mejor espaciado */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mt-16 px-4">
-            <div className="group text-center hover:scale-105 transition-all duration-300 bg-primary/30 backdrop-blur-lg border border-accent/20 rounded-2xl p-8 lg:p-10">
-              <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-accent mb-4 group-hover:scale-110 transition-transform">
-                15+
-              </div>
-              <div className="text-xs md:text-sm font-mono text-primary-foreground/80 tracking-[0.15em] uppercase">
-                Años de Experiencia
-              </div>
-            </div>
-            <div className="group text-center hover:scale-105 transition-all duration-300 bg-primary/30 backdrop-blur-lg border border-accent/20 rounded-2xl p-8 lg:p-10">
-              <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-accent mb-4 group-hover:scale-110 transition-transform">
-                500+
-              </div>
-              <div className="text-xs md:text-sm font-mono text-primary-foreground/80 tracking-[0.15em] uppercase">
-                Alumnos Activos
-              </div>
-            </div>
-            <div className="group text-center hover:scale-105 transition-all duration-300 bg-primary/30 backdrop-blur-lg border border-accent/20 rounded-2xl p-8 lg:p-10">
-              <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-accent mb-4 group-hover:scale-110 transition-transform">
-                50+
-              </div>
-              <div className="text-xs md:text-sm font-mono text-primary-foreground/80 tracking-[0.15em] uppercase">
-                Campeones Formados
-              </div>
-            </div>
-          </div>
+          </Reveal>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-        <div className="w-7 h-12 border-2 border-accent/60 rounded-full flex items-start justify-center p-2 backdrop-blur-sm bg-primary/20">
-          <div className="w-2 h-3 bg-accent rounded-full animate-pulse-slow" />
-        </div>
-      </div>
+      {/* Scroll Indicator con animación */}
+      <Reveal direction="fade" delay={2} duration="slow">
+        <m.div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30"
+          animate={{ y: [0, 10, 0] }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="w-7 h-12 border-2 border-accent/60 rounded-full flex items-start justify-center p-2 backdrop-blur-sm bg-primary/20">
+            <m.div
+              className="w-2 h-3 bg-accent rounded-full"
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </div>
+        </m.div>
+      </Reveal>
     </section>
   )
 }

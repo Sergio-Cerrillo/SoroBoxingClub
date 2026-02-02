@@ -104,6 +104,169 @@ export default function DashboardPage() {
     }
   }
 
+  // Show skeleton while authenticating or loading data
+  if (authLoading || loading) {
+    return (
+      <main className="min-h-screen bg-background">
+        <Navigation />
+
+        {/* Hero Section */}
+        <section className="pt-32 pb-12 bg-gradient-to-b from-primary to-primary/95">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-4 text-center">
+              DASHBOARD <span className="text-accent">y FACTURACIÓN</span>
+            </h1>
+            <div className="h-7 w-64 mx-auto bg-primary-foreground/20 rounded animate-pulse" />
+          </div>
+        </section>
+
+        {/* Month Selector Skeleton */}
+        <section className="py-6 bg-muted/30 border-b sticky top-16 z-10 backdrop-blur-sm">
+          <div className="container mx-auto px-4">
+            <div className="flex gap-2 overflow-x-auto pb-2">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="h-9 w-20 bg-muted rounded animate-pulse flex-shrink-0" />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Stats Cards Skeleton */}
+        <section className="py-12">
+          <div className="container mx-auto px-4 space-y-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Ingresos Card */}
+              <Card className="p-6 border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center">
+                    <DollarSign className="w-6 h-6 text-accent" />
+                  </div>
+                  <div className="h-5 w-20 bg-accent/30 rounded animate-pulse" />
+                </div>
+                <div className="h-4 w-32 bg-muted rounded animate-pulse mb-1" />
+                <div className="h-9 w-24 bg-accent/30 rounded animate-pulse mb-2" />
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+                  <div className="h-3 w-40 bg-muted rounded animate-pulse" />
+                </div>
+              </Card>
+
+              {/* Pagos Card */}
+              <Card className="p-6 border-2 border-green-500/20">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                    <CheckCircle2 className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="h-5 w-16 bg-muted rounded animate-pulse" />
+                </div>
+                <div className="h-4 w-32 bg-muted rounded animate-pulse mb-1" />
+                <div className="h-9 w-16 bg-muted rounded animate-pulse mb-2" />
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+                  <div className="h-3 w-36 bg-muted rounded animate-pulse" />
+                </div>
+              </Card>
+
+              {/* Pendientes Card */}
+              <Card className="p-6 border-2 border-destructive/20">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-destructive/20 rounded-xl flex items-center justify-center">
+                    <AlertCircle className="w-6 h-6 text-destructive" />
+                  </div>
+                  <div className="h-5 w-20 bg-muted rounded animate-pulse" />
+                </div>
+                <div className="h-4 w-32 bg-muted rounded animate-pulse mb-1" />
+                <div className="h-9 w-16 bg-muted rounded animate-pulse mb-2" />
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+                  <div className="h-3 w-28 bg-muted rounded animate-pulse" />
+                </div>
+              </Card>
+
+              {/* Usuarios Card */}
+              <Card className="p-6 border-2 border-primary/20">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="h-5 w-16 bg-muted rounded animate-pulse" />
+                </div>
+                <div className="h-4 w-32 bg-muted rounded animate-pulse mb-1" />
+                <div className="h-9 w-16 bg-muted rounded animate-pulse mb-2" />
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse" />
+                  <div className="h-3 w-32 bg-muted rounded animate-pulse" />
+                </div>
+              </Card>
+            </div>
+
+            {/* Charts Skeleton */}
+            <div className="grid lg:grid-cols-2 gap-6">
+              <Card className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="h-5 w-5 bg-muted rounded animate-pulse" />
+                  <div className="h-6 w-48 bg-muted rounded animate-pulse" />
+                </div>
+                <div className="h-[250px] bg-muted/30 rounded animate-pulse" />
+              </Card>
+
+              <Card className="p-6">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="h-5 w-5 bg-muted rounded animate-pulse" />
+                  <div className="h-6 w-32 bg-muted rounded animate-pulse" />
+                </div>
+                <div className="h-[250px] bg-muted/30 rounded animate-pulse" />
+              </Card>
+            </div>
+
+            {/* Payment Methods Skeleton */}
+            <Card className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="h-5 w-5 bg-muted rounded animate-pulse" />
+                <div className="h-6 w-40 bg-muted rounded animate-pulse" />
+              </div>
+              <div className="space-y-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-4">
+                    <div className="h-4 w-4 bg-muted rounded-full animate-pulse" />
+                    <div className="flex-1">
+                      <div className="h-4 w-32 bg-muted rounded animate-pulse mb-2" />
+                      <div className="h-2 bg-muted rounded animate-pulse" />
+                    </div>
+                    <div className="h-5 w-16 bg-muted rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* User Payments List Skeleton */}
+            <Card className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="h-5 w-5 bg-muted rounded animate-pulse" />
+                <div className="h-6 w-48 bg-muted rounded animate-pulse" />
+              </div>
+              <div className="space-y-3">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-4 p-4 border rounded-lg">
+                    <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 w-40 bg-muted rounded animate-pulse" />
+                      <div className="h-3 w-24 bg-muted rounded animate-pulse" />
+                    </div>
+                    <div className="h-5 w-20 bg-muted rounded animate-pulse" />
+                    <div className="h-8 w-16 bg-muted rounded animate-pulse" />
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+        </section>
+
+        <Footer />
+      </main>
+    )
+  }
+
   if (!isAuthenticated || !isAdmin) return null
 
   const activeUsers = users.filter((u) => u.role === "client" && !u.deleted_at)
@@ -253,18 +416,6 @@ export default function DashboardPage() {
     "Noviembre",
     "Diciembre",
   ]
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-background">
-        <Navigation />
-        <div className="container mx-auto px-4 py-32 text-center">
-          <p className="text-muted-foreground">Cargando datos del dashboard...</p>
-        </div>
-        <Footer />
-      </main>
-    )
-  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -462,8 +613,8 @@ export default function DashboardPage() {
                 <div
                   key={u.id}
                   className={`flex items-center justify-between p-5 rounded-xl border-2 transition-all hover:shadow-md ${payment.paid
-                      ? "border-green-500/30 bg-green-500/5"
-                      : "border-destructive/30 bg-destructive/5 animate-pulse"
+                    ? "border-green-500/30 bg-green-500/5"
+                    : "border-destructive/30 bg-destructive/5 animate-pulse"
                     }`}
                 >
                   <div className="flex items-center gap-4 flex-1">

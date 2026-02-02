@@ -1,152 +1,176 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import { Card } from "@/components/ui/card"
 
 export function Footer() {
   return (
-    <footer className="bg-background border-t border-border">
+    <footer className="bg-black border-t border-accent/30">
       <div className="container mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
-          <div>
-            <div className="text-3xl font-bold mb-4">
-              <span className="text-accent">SORO</span>
-              <span className="text-foreground"> BOXING</span>
+        {/* Card global única */}
+        <Card className="p-8 bg-zinc-900 border-accent/30 shadow-lg shadow-accent/20 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Brand */}
+            <div className="flex flex-col items-center justify-center lg:items-start">
+              <div className="mb-4">
+                <Image
+                  src="/logo.png"
+                  alt="Soro Boxing Club"
+                  width={200}
+                  height={50}
+                  className="object-contain"
+                />
+              </div>
             </div>
-            <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-6">
-              {"La mejor academia de boxeo con entrenadores profesionales y equipamiento de última generación."}
-            </p>
-            <div className="flex gap-4">
-              <a
-                href="#"
-                className="w-10 h-10 bg-muted hover:bg-accent flex items-center justify-center transition-colors group"
-              >
-                <Facebook className="w-5 h-5 text-muted-foreground group-hover:text-accent-foreground" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-muted hover:bg-accent flex items-center justify-center transition-colors group"
-              >
-                <Instagram className="w-5 h-5 text-muted-foreground group-hover:text-accent-foreground" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-muted hover:bg-accent flex items-center justify-center transition-colors group"
-              >
-                <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-accent-foreground" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-muted hover:bg-accent flex items-center justify-center transition-colors group"
-              >
-                <Youtube className="w-5 h-5 text-muted-foreground group-hover:text-accent-foreground" />
-              </a>
+
+            {/* Navegación */}
+            <div>
+              <h3 className="text-sm font-bold text-white mb-4 font-mono flex items-center gap-2">
+                <span className="w-1 h-4 bg-accent"></span>
+                NAVEGACIÓN
+              </h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="#servicios" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
+                    Servicios
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/cuotas" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
+                    Planes
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/galeria" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
+                    Galería
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/entrenadores" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
+                    Entrenadores
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contacto */}
+            <div>
+              <h3 className="text-sm font-bold text-white mb-4 font-mono flex items-center gap-2">
+                <span className="w-1 h-4 bg-accent"></span>
+                CONTACTO
+              </h3>
+              <div className="flex flex-col gap-2 lg:max-w-[180px]">
+                <a
+                  href="mailto:soroboxingclubsta@gmail.com"
+                  className="h-7 bg-zinc-800 hover:bg-accent flex items-center justify-center gap-1 transition-all duration-300 group border border-accent/30 rounded-md"
+                >
+                  <Mail className="w-3.5 h-3.5 text-gray-400 group-hover:text-accent-foreground transition-colors" />
+                  <span className="text-gray-400 group-hover:text-accent-foreground text-[0.65rem] font-mono">Email</span>
+                </a>
+                <a
+                  href="tel:+34669102905"
+                  className="h-7 bg-zinc-800 hover:bg-accent flex items-center justify-center gap-1 transition-all duration-300 group border border-accent/30 rounded-md"
+                >
+                  <Phone className="w-3.5 h-3.5 text-gray-400 group-hover:text-accent-foreground transition-colors" />
+                  <span className="text-gray-400 group-hover:text-accent-foreground text-[0.65rem] font-mono">Llamar</span>
+                </a>
+                <a
+                  href="https://wa.me/34669102905"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-7 bg-zinc-800 hover:bg-accent flex items-center justify-center gap-1 transition-all duration-300 group border border-accent/30 rounded-md"
+                >
+                  <Phone className="w-3.5 h-3.5 text-gray-400 group-hover:text-accent-foreground transition-colors" />
+                  <span className="text-gray-400 group-hover:text-accent-foreground text-[0.65rem] font-mono">WhatsApp</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/soroboxingclub/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-7 bg-zinc-800 hover:bg-accent flex items-center justify-center gap-1 transition-all duration-300 group border border-accent/30 rounded-md"
+                >
+                  <Instagram className="w-3.5 h-3.5 text-gray-400 group-hover:text-accent-foreground transition-colors" />
+                  <span className="text-gray-400 group-hover:text-accent-foreground text-[0.65rem] font-mono">Instagram</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Ubicación */}
+            <div>
+              <h3 className="text-sm font-bold text-white mb-4 font-mono flex items-center gap-2">
+                <span className="w-1 h-4 bg-accent"></span>
+                UBICACIÓN
+              </h3>
+              <div className="rounded-lg overflow-hidden border border-accent/30" style={{ height: '120px' }}>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3072.9446792584946!2d2.7475!3d39.6850!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1297912c0a7c7d9b%3A0x9c7c7c7c7c7c7c7c!2sCarrer%20Casesnoves%2C%2015%2C%2007320%20Santa%20Maria%20del%20Cam%C3%AD%2C%20Illes%20Balears!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-bold text-foreground mb-4 font-mono">ENLACES RÁPIDOS</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link
-                  href="#servicios"
-                  className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm"
-                >
-                  Servicios
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#horarios"
-                  className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm"
-                >
-                  Horarios
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#videos"
-                  className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm"
-                >
-                  Videos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#combates"
-                  className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm"
-                >
-                  Combates
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Programs */}
-          <div>
-            <h3 className="text-lg font-bold text-foreground mb-4 font-mono">PROGRAMAS</h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
-                  Principiantes
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
-                  Intermedio
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
-                  Avanzado
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
-                  Competición
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h3 className="text-lg font-bold text-foreground mb-4 font-mono">CONTACTO</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-muted-foreground font-mono text-sm">Calle del Boxeo 123, Madrid</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-muted-foreground font-mono text-sm">+34 900 123 456</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                <span className="text-muted-foreground font-mono text-sm">info@soroboxing.com</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-border">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-muted-foreground font-mono text-sm">
-              © 2025 Soro Boxing. Todos los derechos reservados.
+          {/* Horarios centrados */}
+          <div className="pt-6 mt-6 text-center">
+            <p className="text-gray-400 font-mono text-xs">
+              <span className="text-accent font-bold">365 días al año</span> de 09:00 a 21:00
             </p>
-            <div className="flex gap-6">
-              <Link href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
+          </div>
+
+
+
+          {/* Enlaces legales centrados en la parte inferior de la card */}
+          <div className="pt-4 mt-4 border-t border-accent/30">
+
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link href="#" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
                 Privacidad
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
+              <Link href="#" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
                 Términos
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-accent transition-colors font-mono text-sm">
+              <Link href="#" className="text-gray-400 hover:text-accent transition-colors font-mono text-xs">
                 Cookies
               </Link>
             </div>
+            <p className="text-gray-400 font-mono text-sm text-center mt-4 -mb-4">
+              © 2026 Soro Boxing Club. Todos los derechos reservados.
+            </p>
           </div>
+        </Card>
+
+        {/* Bottom Bar */}
+        <div className="pt-6 border-t border-accent/30">
+          {/* Desarrollado por */}
+          <div className="pt-6 text-center flex flex-col items-center gap-3">
+            <h4 className="text-sm font-bold text-white font-mono mb-2 flex items-center gap-2">
+              <span className="w-1 h-4 bg-accent"></span>
+              DESARROLLADO POR
+            </h4>
+            <a
+              href="https://www.scwebstudio.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <Image
+                src="/logo-full-w.png"
+                alt="Desarrollado por"
+                width={150}
+                height={75}
+                className="object-contain"
+              />
+              <span className="text-gray-400 hover:text-accent transition-colors font-mono text-sm">
+                www.scwebstudio.tech
+              </span>
+            </a>
+          </div>
+
         </div>
       </div>
     </footer>

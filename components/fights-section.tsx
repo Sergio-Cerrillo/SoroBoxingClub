@@ -1,109 +1,83 @@
 "use client"
 
+import { m } from "framer-motion"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Calendar, MapPin, Trophy, Users } from "lucide-react"
+import { Trophy, Target, Flame } from "lucide-react"
+import { Stagger, StaggerItem, Reveal } from "@/components/motion"
+import { motionConfig } from "@/lib/motion/config"
 
 const fights = [
-  {
-    title: "Torneo Primavera 2025",
-    date: "15 de Marzo, 2025",
-    location: "Arena Soro Boxing",
-    category: "Amateur",
-    participants: "32 boxeadores",
-    prize: "€5,000",
-    status: "Inscripciones abiertas",
-  },
-  {
-    title: "Campeonato Regional",
-    date: "22 de Abril, 2025",
-    location: "Palacio de Deportes",
-    category: "Semi-profesional",
-    participants: "16 boxeadores",
-    prize: "€10,000",
-    status: "Próximamente",
-  },
-  {
-    title: "Copa Soro Boxing",
-    date: "10 de Mayo, 2025",
-    location: "Arena Soro Boxing",
-    category: "Todos los niveles",
-    participants: "48 boxeadores",
-    prize: "€3,000",
-    status: "Inscripciones abiertas",
-  },
+    {
+        icon: Trophy,
+        title: "Preparación Profesional",
+        description: "Entrenamiento intensivo para competidores que buscan destacar en el ring.",
+    },
+    {
+        icon: Target,
+        title: "Estrategia de Combate",
+        description: "Análisis táctico y técnicas avanzadas para dominar cualquier enfrentamiento.",
+    },
+    {
+        icon: Flame,
+        title: "Condición Física Extrema",
+        description: "Programas de acondicionamiento diseñados para atletas de alto rendimiento.",
+    },
 ]
 
 export function FightsSection() {
-  return (
-    <section id="combates" className="py-24 bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            PRÓXIMOS <span className="text-accent">COMBATES</span>
-          </h2>
-          <p className="text-lg text-primary-foreground/80 font-mono max-w-2xl mx-auto">
-            {"Demuestra tu talento y compite con los mejores boxeadores"}
-          </p>
-        </div>
+    return (
+        <section className="py-24 lg:py-32 bg-background">
+            <div className="container mx-auto px-4 lg:px-8">
+                <div className="text-center mb-20">
+                    <Reveal direction="down" delay={0.1}>
+                        <div className="inline-block px-6 py-2 bg-accent/10 border border-accent/30 rounded-full mb-6">
+                            <span className="text-accent font-mono text-xs tracking-[0.2em] uppercase font-medium">
+                                Combates
+                            </span>
+                        </div>
+                    </Reveal>
 
-        <div className="grid lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {fights.map((fight, index) => (
-            <Card
-              key={index}
-              className="p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 border-accent/20 hover:border-accent bg-card"
-            >
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="px-3 py-1 bg-accent text-accent-foreground text-xs font-mono tracking-wide">
-                    {fight.category}
-                  </span>
-                  <span
-                    className={`px-3 py-1 text-xs font-mono tracking-wide ${
-                      fight.status === "Inscripciones abiertas"
-                        ? "bg-accent/10 text-accent"
-                        : "bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {fight.status}
-                  </span>
-                </div>
-                <h3 className="text-2xl font-bold text-card-foreground mb-2">{fight.title}</h3>
-              </div>
+                    <Reveal direction="up" delay={0.2}>
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+                            PREPARACIÓN PARA <span className="text-accent">COMBATES</span>
+                        </h2>
+                    </Reveal>
 
-              <div className="space-y-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="font-mono text-sm text-card-foreground">{fight.date}</span>
+                    <Reveal direction="up" delay={0.3}>
+                        <p className="text-base md:text-lg text-muted-foreground font-mono max-w-3xl mx-auto leading-relaxed">
+                            Entrena como un profesional y lleva tu técnica al siguiente nivel
+                        </p>
+                    </Reveal>
                 </div>
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="font-mono text-sm text-card-foreground">{fight.location}</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Users className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="font-mono text-sm text-card-foreground">{fight.participants}</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Trophy className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="font-mono text-sm text-card-foreground">Premio: {fight.prize}</span>
-                </div>
-              </div>
 
-              <Button
-                className={`w-full font-mono tracking-wide ${
-                  fight.status === "Inscripciones abiertas"
-                    ? "bg-accent text-accent-foreground hover:bg-accent/90"
-                    : "bg-muted text-muted-foreground cursor-not-allowed"
-                }`}
-                disabled={fight.status !== "Inscripciones abiertas"}
-              >
-                {fight.status === "Inscripciones abiertas" ? "INSCRIBIRME" : "PRÓXIMAMENTE"}
-              </Button>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+                <Stagger staggerDelay={motionConfig.stagger.normal} className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    {fights.map((fight, index) => (
+                        <StaggerItem key={index} direction="up">
+                            <m.div
+                                whileHover={{ y: -10, scale: 1.02 }}
+                                transition={motionConfig.easing.spring}
+                                className="h-full"
+                            >
+                                <Card className="p-8 hover:shadow-2xl transition-all duration-500 border-2 hover:border-accent bg-card h-full">
+                                    <m.div
+                                        className="w-16 h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-6"
+                                        whileHover={{ rotate: 360, scale: 1.15 }}
+                                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                                    >
+                                        <fight.icon className="w-8 h-8 text-accent" />
+                                    </m.div>
+                                    <h3 className="text-xl font-bold mb-4 text-card-foreground group-hover:text-accent transition-colors">
+                                        {fight.title}
+                                    </h3>
+                                    <p className="text-muted-foreground font-mono text-sm leading-relaxed">
+                                        {fight.description}
+                                    </p>
+                                </Card>
+                            </m.div>
+                        </StaggerItem>
+                    ))}
+                </Stagger>
+            </div>
+        </section>
+    )
 }

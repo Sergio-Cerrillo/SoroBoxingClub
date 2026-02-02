@@ -2,11 +2,13 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
+import Link from "next/link"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Shield, LogIn } from "lucide-react"
+import { Shield, LogIn, ArrowLeft } from "lucide-react"
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
@@ -66,19 +68,38 @@ export default function LoginPage() {
         />
       </div>
 
-      <Card className="w-full max-w-md p-8 relative z-10 border-2 border-accent/20 shadow-2xl backdrop-blur-sm bg-background/95">
+      <Card className="w-full max-w-md p-8 relative z-10 border-2 border-accent/20 shadow-2xl shadow-accent/40 backdrop-blur-sm bg-black rounded-3xl">
+        {/* Botón volver a inicio */}
+        <Link href="/" className="absolute top-4 left-4">
+          <Button
+            variant="outline"
+            size="sm"
+            className="bg-zinc-900/80 backdrop-blur-sm border-accent/50 hover:bg-zinc-800 hover:border-accent text-white rounded-full"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Inicio
+          </Button>
+        </Link>
+
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            SORO <span className="text-accent">BOXING</span>
-          </h1>
+          <div className="flex justify-center mb-4">
+            <Image
+              src="/logo.png"
+              alt="Soro Boxing Club"
+              width={400}
+              height={67}
+              className=" p-3"
+              priority
+            />
+          </div>
           <p className="text-sm font-mono text-muted-foreground tracking-widest">ACCESO AL SISTEMA</p>
         </div>
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <Label htmlFor="dni" className="text-sm font-mono uppercase text-muted-foreground">
+            <Label htmlFor="dni" className="text-sm font-mono uppercase text-white">
               DNI
             </Label>
             <Input
@@ -89,13 +110,13 @@ export default function LoginPage() {
               onChange={(e) => setDni(e.target.value)}
               required
               disabled={loading}
-              className="mt-2 bg-background/50 border-accent/20 focus:border-accent"
+              className="mt-2 bg-zinc-900 border-2 border-accent/50 focus:border-accent text-white placeholder:text-zinc-500 rounded-2xl"
             />
           </div>
 
           <div>
-            <Label htmlFor="pin" className="text-sm font-mono uppercase text-muted-foreground">
-              PIN
+            <Label htmlFor="pin" className="text-sm font-mono uppercase text-white">
+              Contraseña
             </Label>
             <Input
               id="pin"
@@ -105,7 +126,7 @@ export default function LoginPage() {
               onChange={(e) => setPin(e.target.value)}
               required
               disabled={loading}
-              className="mt-2 bg-background/50 border-accent/20 focus:border-accent"
+              className="mt-2 bg-zinc-900 border-2 border-accent/50 focus:border-accent text-white placeholder:text-zinc-500 rounded-2xl"
             />
           </div>
 
@@ -117,7 +138,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full bg-accent hover:bg-accent/90 text-black font-bold py-3"
+            className="w-full bg-accent hover:bg-accent/90 text-black font-bold py-3 rounded-2xl"
             disabled={loading}
           >
             {loading ? (

@@ -49,7 +49,7 @@ export default function GestionPage() {
     },
     {
       icon: BarChart3,
-      title: "DASHBOARD & FACTURACIÓN",
+      title: "FACTURACIÓN",
       description: "Métricas financieras y control de cobros",
       link: "/gestion/dashboard",
       color: "blue-500",
@@ -73,7 +73,7 @@ export default function GestionPage() {
             <p className="text-xl text-primary-foreground/80 font-mono">Administración completa de tu academia</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {sections.map((section, index) => (
               <Button
                 key={index}

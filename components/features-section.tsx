@@ -6,39 +6,47 @@ import { Shield, Award, Heart, Clock, Target, Zap } from "lucide-react"
 const features = [
   {
     icon: Shield,
-    title: "Instalaciones de Élite",
-    description: "Equipamiento profesional y espacios diseñados específicamente para el máximo rendimiento y confort",
+    title: "Instalaciones de calidad",
+    description: "Equipamiento profesional y espacios diseñados específicamente para el máximo rendimiento y confort.",
   },
   {
     icon: Award,
     title: "Entrenadores Certificados",
-    description: "Profesionales con experiencia internacional, títulos mundiales y certificaciones de primer nivel",
+    description: "Profesionales con experiencia internacional, títulos nacionales y certificaciones de primer nivel.",
   },
   {
     icon: Heart,
     title: "Atención Personalizada",
-    description: "Seguimiento individual detallado de tu progreso, objetivos personales y desarrollo continuo",
+    description: "Seguimiento individual detallado de tu progreso, objetivos personales y desarrollo continuo.",
   },
   {
     icon: Clock,
     title: "Horarios Flexibles",
-    description: "Clases disponibles durante todo el día, adaptadas perfectamente a tu agenda y estilo de vida",
+    description: "Clases disponibles durante todo el día, adaptadas perfectamente a tu agenda y estilo de vida.",
   },
   {
     icon: Target,
     title: "Resultados Garantizados",
-    description: "Programas científicamente probados que te llevan al siguiente nivel de forma segura y efectiva",
+    description: "Programas científicamente probados que te llevan al siguiente nivel de forma segura y efectiva.",
   },
   {
     icon: Zap,
     title: "Energía y Motivación",
-    description: "Comunidad vibrante y apasionada que te impulsa diariamente a superar todos tus límites",
+    description: "Comunidad vibrante y apasionada que te impulsa diariamente a superar todos tus límites.",
   },
 ]
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 lg:py-32 bg-primary relative overflow-hidden">
+    <section className="py-24 lg:py-32 relative overflow-hidden">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('nosotros.jpg')" }}
+      />
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/70" />
+
       {/* Background decorative elements */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-72 h-72 bg-accent rounded-full blur-3xl animate-float" />

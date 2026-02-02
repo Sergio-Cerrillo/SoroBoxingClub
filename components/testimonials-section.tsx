@@ -85,13 +85,13 @@ export function TestimonialsSection() {
 
         {/* Trust badge */}
         <div className="text-center mt-16">
-          <p className="text-muted-foreground font-mono text-sm mb-4">MÁS DE 500 HISTORIAS DE ÉXITO</p>
+          <p className="text-muted-foreground font-mono text-sm mb-4">MÁS DE 150 HISTORIAS DE ÉXITO</p>
           <div className="flex justify-center items-center gap-2">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="w-6 h-6 fill-accent text-accent" />
             ))}
             <span className="ml-3 text-2xl font-bold text-foreground">4.9/5</span>
-            <span className="text-muted-foreground font-mono text-sm">(500+ reseñas)</span>
+            <span className="text-muted-foreground font-mono text-sm">(150+ reseñas)</span>
           </div>
         </div>
       </div>

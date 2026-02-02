@@ -21,7 +21,19 @@ export async function middleware(request: NextRequest) {
   })
 
   // Rutas públicas (no requieren autenticación)
-  const publicPaths = ['/login', '/']
+  const publicPaths = [
+    '/login', 
+    '/', 
+    '/entrenadores', 
+    '/galeria', 
+    '/cuotas', 
+    '/contacto',
+    '/horarios',
+    '/combates',
+    '/normas',
+    '/videos',
+    '/clases'
+  ]
   const isPublicPath = publicPaths.includes(request.nextUrl.pathname)
 
   if (isPublicPath) {

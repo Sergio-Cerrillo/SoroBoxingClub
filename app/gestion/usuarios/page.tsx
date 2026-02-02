@@ -60,6 +60,7 @@ export default function GestionUsuariosPage() {
   const [allUsers, setAllUsers] = useState<User[]>([])
   const [loadingUsers, setLoadingUsers] = useState(true)
   const [showAddUserDialog, setShowAddUserDialog] = useState(false)
+  const [showPendingPaymentsDialog, setShowPendingPaymentsDialog] = useState(false)
   const [newUserData, setNewUserData] = useState({
     dni: "",
     first_name: "",
@@ -259,13 +260,90 @@ export default function GestionUsuariosPage() {
     return null
   }
 
+  // Skeleton durante la carga de usuarios
   if (loadingUsers) {
     return (
       <main className="min-h-screen bg-background">
         <Navigation />
-        <div className="container mx-auto px-4 py-32 text-center">
-          <p className="text-muted-foreground">Cargando usuarios...</p>
-        </div>
+
+        {/* Hero Section Skeleton */}
+        <section className="pt-32 pb-16 bg-gradient-to-b from-primary to-primary/95 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 right-10 w-96 h-96 bg-accent rounded-full blur-3xl animate-float" />
+          </div>
+
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center max-w-4xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-6 py-2 bg-accent/20 backdrop-blur-sm border border-accent/50 rounded-full mb-6">
+                <Shield className="w-4 h-4 text-accent" />
+                <span className="text-accent font-mono text-sm tracking-widest">GESTIÓN DE USUARIOS</span>
+              </div>
+              <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-4">
+                ADMINISTRACIÓN <span className="text-accent">USUARIOS</span>
+              </h1>
+              <p className="text-lg text-primary-foreground/80 font-mono">
+                Gestiona pagos, reservas y estado de los usuarios
+              </p>
+            </div>
+
+            {/* Stats Dashboard Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+                  <div className="w-8 h-8 bg-accent/30 rounded-full mx-auto mb-3 animate-pulse" />
+                  <div className="h-10 bg-accent/30 rounded mx-auto mb-2 w-16 animate-pulse" />
+                  <div className="h-4 bg-primary-foreground/20 rounded mx-auto w-32 animate-pulse" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Search Skeleton */}
+        <section className="py-8 bg-muted/50 border-b border-border sticky top-20 z-40 backdrop-blur-lg">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl mx-auto">
+              <div className="h-14 bg-muted rounded-lg animate-pulse" />
+            </div>
+          </div>
+        </section>
+
+        {/* Users List Skeleton */}
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-between mb-8">
+                <div className="h-9 bg-muted rounded w-64 animate-pulse" />
+                <div className="h-10 bg-accent/30 rounded w-48 animate-pulse" />
+              </div>
+
+              <div className="grid gap-4">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Card key={i} className="p-6 border-2 border-border/50">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="h-7 bg-muted rounded w-48 mb-2 animate-pulse" />
+                        <div className="h-5 bg-muted rounded w-32 animate-pulse" />
+                      </div>
+                      <div className="h-6 bg-accent/30 rounded-full w-20 animate-pulse" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div className="h-5 bg-muted rounded w-full animate-pulse" />
+                      <div className="h-5 bg-muted rounded w-full animate-pulse" />
+                      <div className="h-5 bg-muted rounded w-full animate-pulse" />
+                    </div>
+                    <div className="flex gap-2">
+                      <div className="h-9 bg-muted rounded flex-1 animate-pulse" />
+                      <div className="h-9 bg-muted rounded flex-1 animate-pulse" />
+                      <div className="h-9 bg-muted rounded w-24 animate-pulse" />
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Footer />
       </main>
     )
@@ -284,6 +362,30 @@ export default function GestionUsuariosPage() {
 
   const totalUsers = allUsers.filter((u) => u.role === "client").length
   const activeUsers = totalUsers // Por ahora todos son activos (no tienen deleted_at)
+
+  // Calcular pagos pendientes del último mes
+  const getCurrentPeriod = () => {
+    const now = new Date()
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`
+  }
+
+  const currentPeriod = getCurrentPeriod()
+
+  console.log('🔍 Current period:', currentPeriod)
+  console.log('📊 All users with dues:', allUsers.map(u => ({
+    name: [u.first_name, u.last_name].join(' '),
+    dues: u.dues?.map(d => ({ period: d.period_month, status: d.status }))
+  })))
+
+  const usersWithPendingPayments = allUsers
+    .filter((u) => u.role === "client")
+    .filter((u) => {
+      const currentDue = u.dues?.find(d => d.period_month === currentPeriod)
+      console.log('🔎 Checking user:', [u.first_name, u.last_name].join(' '), 'currentDue:', currentDue)
+      return currentDue && currentDue.status === "pending"
+    })
+
+  const pendingPaymentsCount = usersWithPendingPayments.length
 
   return (
     <main className="min-h-screen bg-background">
@@ -310,7 +412,7 @@ export default function GestionUsuariosPage() {
           </div>
 
           {/* Stats Dashboard */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-12">
             <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
               <Users className="w-8 h-8 text-accent mx-auto mb-3" />
               <div className="text-4xl font-bold text-accent mb-2">{totalUsers}</div>
@@ -321,16 +423,14 @@ export default function GestionUsuariosPage() {
               <div className="text-4xl font-bold text-accent mb-2">{activeUsers}</div>
               <div className="text-sm font-mono text-primary-foreground/70">Usuarios Activos</div>
             </div>
-            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
+            <button
+              onClick={() => setShowPendingPaymentsDialog(true)}
+              className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center hover:bg-primary-foreground/10 transition-colors cursor-pointer"
+            >
               <AlertCircle className="w-8 h-8 text-accent mx-auto mb-3" />
-              <div className="text-4xl font-bold text-accent mb-2">0</div>
+              <div className="text-4xl font-bold text-accent mb-2">{pendingPaymentsCount}</div>
               <div className="text-sm font-mono text-primary-foreground/70">Pagos Pendientes</div>
-            </div>
-            <div className="bg-primary-foreground/5 backdrop-blur-sm border border-primary-foreground/10 rounded-xl p-6 text-center">
-              <Calendar className="w-8 h-8 text-accent mx-auto mb-3" />
-              <div className="text-4xl font-bold text-accent mb-2">0</div>
-              <div className="text-sm font-mono text-primary-foreground/70">Reservas Totales</div>
-            </div>
+            </button>
           </div>
         </div>
       </section>
@@ -435,6 +535,70 @@ export default function GestionUsuariosPage() {
                 </DialogContent>
               </Dialog>
             </div>
+
+            {/* Diálogo de Pagos Pendientes */}
+            <Dialog open={showPendingPaymentsDialog} onOpenChange={setShowPendingPaymentsDialog}>
+              <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+                    <AlertCircle className="w-6 h-6 text-accent" />
+                    Usuarios con Pagos Pendientes ({pendingPaymentsCount})
+                  </DialogTitle>
+                  <DialogDescription>
+                    Listado de usuarios con cuotas pendientes del mes actual ({currentPeriod})
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="py-4">
+                  {usersWithPendingPayments.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <CheckCircle2 className="w-12 h-12 mx-auto mb-3 text-green-500" />
+                      <p>¡Todos los pagos del mes están al día!</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {usersWithPendingPayments.map((u) => {
+                        const fullName = [u.first_name, u.last_name].filter(Boolean).join(" ") || u.dni
+                        const currentDue = u.dues?.find(d => d.period_month === currentPeriod)
+                        const amount = currentDue ? (currentDue.amount_cents / 100).toFixed(2) : "0.00"
+
+                        return (
+                          <Card key={u.id} className="p-4 border-2 border-orange-500/30">
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-3 flex-1">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center text-sm font-bold text-primary-foreground flex-shrink-0">
+                                  {fullName.charAt(0).toUpperCase()}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="font-semibold text-foreground truncate">{fullName}</p>
+                                  <p className="text-sm text-muted-foreground">{u.dni}</p>
+                                  {u.phone && (
+                                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                                      <Phone className="w-3 h-3" />
+                                      {u.phone}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="text-right flex-shrink-0">
+                                <Badge variant="outline" className="border-orange-500 text-orange-600 mb-2">
+                                  PENDIENTE
+                                </Badge>
+                                <p className="text-lg font-bold text-accent">{amount}€</p>
+                              </div>
+                            </div>
+                          </Card>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setShowPendingPaymentsDialog(false)}>
+                    Cerrar
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
 
             <div className="grid gap-4">
               {filteredUsers
