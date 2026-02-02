@@ -43,7 +43,7 @@ export function FeaturesSection() {
       {/* Background image */}
       <div className="absolute inset-0">
         <Image
-          src="/nosotros.jpg"
+          src="/instalaciones.JPG"
           alt="Background"
           fill
           className="object-cover"
