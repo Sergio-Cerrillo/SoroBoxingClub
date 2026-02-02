@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card"
 import { Shield, Award, Heart, Clock, Target, Zap } from "lucide-react"
+import Image from "next/image"
 
 const features = [
   {
@@ -40,10 +41,16 @@ export function FeaturesSection() {
   return (
     <section className="py-24 lg:py-32 relative overflow-hidden">
       {/* Background image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/nosotros.jpg')" }}
-      />
+      <div className="absolute inset-0">
+        <Image
+          src="/nosotros.jpg"
+          alt="Background"
+          fill
+          className="object-cover"
+          priority={false}
+          quality={85}
+        />
+      </div>
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/70" />
 
