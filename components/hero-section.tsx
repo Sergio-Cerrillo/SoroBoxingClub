@@ -8,43 +8,109 @@ import { Reveal, TextReveal, ParallaxOpacity } from "@/components/motion"
 import { motionConfig } from "@/lib/motion/config"
 import { useState, useRef, useEffect } from "react"
 
+declare global {
+  interface Window {
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
+  }
+}
+
 export function HeroSection() {
-  const [isMuted, setIsMuted] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  const [isMuted, setIsMuted] = useState(true)
+  const [player, setPlayer] = useState<any>(null)
+  const playerRef = useRef<HTMLDivElement>(null)
+  const [isApiReady, setIsApiReady] = useState(false)
+
+  useEffect(() => {
+    // Evitar duplicar el script
+    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      if (window.YT && window.YT.Player) {
+        setIsApiReady(true)
+      }
+      return
+    }
+
+    // Cargar la API de YouTube
+    const tag = document.createElement('script')
+    tag.src = 'https://www.youtube.com/iframe_api'
+    tag.async = true
+    const firstScriptTag = document.getElementsByTagName('script')[0]
+    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
+
+    // Configurar callback global
+    window.onYouTubeIframeAPIReady = () => {
+      setIsApiReady(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isApiReady || !playerRef.current || player) return
+
+    const newPlayer = new window.YT.Player(playerRef.current, {
+      videoId: 'J_PQCSPZvWk',
+      playerVars: {
+        autoplay: 1,
+        mute: 1,
+        controls: 0,
+        loop: 1,
+        playlist: 'J_PQCSPZvWk',
+        modestbranding: 1,
+        showinfo: 0,
+        rel: 0,
+        disablekb: 1,
+        fs: 0,
+        iv_load_policy: 3,
+        playsinline: 1,
+        enablejsapi: 1,
+      },
+      events: {
+        onReady: (event: any) => {
+          event.target.playVideo()
+          event.target.mute()
+        },
+        onStateChange: (event: any) => {
+          // Si el video se pausa, reanudarlo
+          if (event.data === window.YT.PlayerState.PAUSED) {
+            event.target.playVideo()
+          }
+          // Si el video termina, reiniciarlo
+          if (event.data === window.YT.PlayerState.ENDED) {
+            event.target.playVideo()
+          }
+        }
+      }
+    })
+    setPlayer(newPlayer)
+  }, [isApiReady, player])
 
   const toggleMute = () => {
-    if (iframeRef.current) {
-      const iframe = iframeRef.current
-      const newMutedState = !isMuted
-      setIsMuted(newMutedState)
-
-      // Cambiar la URL del iframe para activar/desactivar el mute
-      const currentSrc = iframe.src
-      iframe.src = currentSrc.replace(
-        newMutedState ? 'mute=0' : 'mute=1',
-        newMutedState ? 'mute=1' : 'mute=0'
-      )
+    if (player && player.isMuted !== undefined) {
+      const currentlyMuted = player.isMuted()
+      if (currentlyMuted) {
+        player.unMute()
+        setIsMuted(false)
+      } else {
+        player.mute()
+        setIsMuted(true)
+      }
     }
   }
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
       <ParallaxOpacity range={[0.3, 1]}>
         <div className="absolute inset-0 z-0">
           {/* YouTube video background */}
           <div className="absolute inset-0 w-full h-full overflow-hidden">
-            <iframe
-              ref={iframeRef}
+            <div
+              ref={playerRef}
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-60 scale-[1.5]"
               style={{
-                border: 'none',
                 width: '177.77777778vh',
                 height: '56.25vw',
                 minWidth: '100vw',
                 minHeight: '100vh'
               }}
-              src="https://www.youtube.com/embed/J_PQCSPZvWk?autoplay=1&mute=0&controls=0&loop=1&playlist=J_PQCSPZvWk&modestbranding=1&showinfo=0&rel=0&disablekb=1&fs=0&iv_load_policy=3&playsinline=1&enablejsapi=0"
-              title="Background video"
-              allow="autoplay; encrypted-media"
             />
           </div>
           {/* Degradado inferior a negro */}
