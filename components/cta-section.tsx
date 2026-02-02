@@ -15,7 +15,7 @@ export function CTASection() {
       <ParallaxScale scale={[1, 1.15]}>
         <div className="absolute inset-0 z-0">
           <Image
-            src="/_ (2).jpeg"
+            src="/exterior.jpg"
             alt="Background"
             fill
             className="object-cover"

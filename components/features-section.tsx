@@ -42,7 +42,7 @@ export function FeaturesSection() {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('nosotros.jpg')" }}
+        style={{ backgroundImage: "url('/nosotros.jpg')" }}
       />
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/70" />

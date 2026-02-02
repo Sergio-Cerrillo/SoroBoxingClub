@@ -71,7 +71,7 @@ export default function CuotasPage() {
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('planes.jpg')" }}
+          style={{ backgroundImage: "url('/planes.JPG')" }}
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60" />

@@ -11,7 +11,7 @@ export default function EntrenadoresPage() {
       titulo: "Entrenador Principal & Fundador de Soro Boxing Club",
       especialidad: "Bi-campeón de Baleares",
       logros: ["+20 años de experiencia", "+19 combates", "Maestro de boxeo"],
-      image: "/andreu.jpg",
+      image: "/andreu.JPG",
       descripcion: "Especialista en boxeo y estrategia de combate.",
     }
   ]
@@ -25,7 +25,7 @@ export default function EntrenadoresPage() {
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('entrenadores.jpg')" }}
+          style={{ backgroundImage: "url('/entrenadores.JPG')" }}
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60" />

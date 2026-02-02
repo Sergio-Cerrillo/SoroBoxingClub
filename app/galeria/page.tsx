@@ -69,7 +69,7 @@ export default function GaleriaPage() {
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/instalaciones.jpg')" }}
+          style={{ backgroundImage: "url('/instalaciones.JPG')" }}
         />
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60" />
