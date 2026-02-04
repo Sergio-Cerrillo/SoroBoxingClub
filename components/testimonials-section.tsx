@@ -36,7 +36,7 @@ export function TestimonialsSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-20">
           <div className="inline-block px-6 py-2 bg-accent/10 border border-accent/30 rounded-full mb-6">
-            <span className="text-accent font-mono text-sm tracking-widest">TESTIMONIOS</span>
+            <span className="text-accent font-mono text-sm tracking-widest ">TESTIMONIOS</span>
           </div>
           <h2 className="text-5xl md:text-7xl font-bold text-foreground mb-6">
             LO QUE DICEN <span className="text-accent">NUESTROS CAMPEONES</span>
@@ -50,7 +50,7 @@ export function TestimonialsSection() {
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              className="p-8 bg-card hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-2 hover:border-accent group animate-scale-in"
+              className="p-8 bg-gradient-to-br from-white/40 via-white/30 to-white/20 backdrop-blur-xl hover:from-white/50 hover:via-white/40 hover:to-white/30 transition-all duration-500 hover:-translate-y-2 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] group animate-scale-in rounded-[28px] border border-amber-500/20 hover:border-amber-500/40"
               style={{ animationDelay: `${index * 0.15}s` }}
             >
               {/* Rating */}
@@ -61,7 +61,7 @@ export function TestimonialsSection() {
               </div>
 
               {/* Testimonial Text */}
-              <p className="text-muted-foreground font-mono text-sm leading-relaxed mb-8 italic">
+              <p className="text-muted-foreground font-medium text-sm leading-relaxed mb-8 italic">
                 "{testimonial.text}"
               </p>
 

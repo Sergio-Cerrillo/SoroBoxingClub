@@ -58,7 +58,7 @@ export function FightsSection() {
                                 transition={motionConfig.easing.spring}
                                 className="h-full"
                             >
-                                <Card className="p-8 hover:shadow-2xl transition-all duration-500 border-2 hover:border-accent bg-card h-full">
+                                <Card className="p-8 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 transition-all duration-500 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] h-full rounded-[28px] border-0">
                                     <m.div
                                         className="w-16 h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-6"
                                         whileHover={{ rotate: 360, scale: 1.15 }}

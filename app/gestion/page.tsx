@@ -78,15 +78,15 @@ export default function GestionPage() {
               <Button
                 key={index}
                 onClick={() => router.push(section.link)}
-                className="h-auto p-8 flex flex-col items-start gap-4 bg-primary-foreground/10 hover:bg-primary-foreground/20 border-2 border-primary-foreground/20 hover:border-accent transition-all duration-300 hover:scale-[1.02] text-left"
+                className="relative h-auto p-8 flex flex-col items-start gap-4 bg-black backdrop-blur-md border-2 border-amber-500/30 hover:border-amber-500/50 transition-all duration-300 text-left shadow-[0_0_10px_rgba(251,191,36,0.2)] hover:shadow-[0_0_30px_rgba(251,191,36,0.5),0_0_60px_rgba(251,191,36,0.3)] hover:scale-[1.03] rounded-[24px] overflow-hidden group !bg-black hover:!bg-black"
                 variant="outline"
               >
-                <div className="w-14 h-14 bg-accent/20 rounded-xl flex items-center justify-center">
+                <div className="w-14 h-14 bg-accent/20 backdrop-blur-md rounded-xl flex items-center justify-center relative z-10">
                   <section.icon className="w-7 h-7 text-accent" />
                 </div>
-                <div>
+                <div className="relative z-10">
                   <h3 className="text-xl font-bold text-primary-foreground mb-2">{section.title}</h3>
-                  <p className="text-sm text-primary-foreground/70 font-mono">{section.description}</p>
+                  <p className="text-sm text-primary-foreground/70 font-light">{section.description}</p>
                 </div>
               </Button>
             ))}

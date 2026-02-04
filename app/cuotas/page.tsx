@@ -108,8 +108,10 @@ export default function CuotasPage() {
               return (
                 <Card
                   key={index}
-                  className={`relative overflow-hidden p-8 bg-zinc-900 ${plan.popular ? "border-accent border-2 shadow-2xl shadow-accent/50 scale-105" : "border-accent/30 shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/50"
-                    } transition-all duration-300`}
+                  className={`relative overflow-hidden p-8 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 ${plan.popular
+                      ? "shadow-[0_20px_70px_rgba(251,191,36,0.3)] hover:shadow-[0_30px_90px_rgba(251,191,36,0.4)] scale-105"
+                      : "shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)]"
+                    } transition-all duration-300 rounded-[28px] border-0`}
                 >
                   {plan.popular && (
                     <div className="absolute top-0 right-0 bg-accent text-accent-foreground px-4 py-1 text-sm font-mono">
@@ -140,9 +142,9 @@ export default function CuotasPage() {
                   </ul>
 
                   <Button
-                    className={`w-full font-mono ${plan.popular
-                      ? "bg-accent text-accent-foreground hover:bg-accent/90"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    className={`w-full font-mono rounded-full shadow-lg hover:shadow-xl transition-all ${plan.popular
+                        ? "bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50"
+                        : "bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border border-amber-500/20 text-white hover:from-white/30 hover:to-white/20 hover:border-amber-500/40"
                       }`}
                     size="lg"
                     asChild
@@ -178,7 +180,7 @@ export default function CuotasPage() {
                 return (
                   <Card
                     key={index}
-                    className="group p-8 bg-zinc-900 border-2 border-accent/30 hover:border-accent shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/40 transition-all duration-300 hover:-translate-y-1"
+                    className="group p-8 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] transition-all duration-300 hover:-translate-y-1 rounded-[28px] border-0"
                   >
                     {item.destacado && (
                       <Badge className="absolute top-4 right-4 bg-accent/20 text-accent border-accent/30">
@@ -196,7 +198,7 @@ export default function CuotasPage() {
 
                     <Link href="/contacto" className="block">
                       <Button
-                        className="w-full bg-black border-2 border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground hover:border-accent font-mono transition-all duration-300"
+                        className="w-full bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border border-amber-500/30 text-accent hover:from-white/30 hover:to-white/20 hover:border-amber-500/50 hover:text-accent font-mono transition-all duration-300 rounded-full shadow-lg hover:shadow-xl"
                       >
                         Infórmate de esto
                       </Button>
@@ -212,7 +214,7 @@ export default function CuotasPage() {
               <Link href="/contacto">
                 <Button
                   size="lg"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
+                  className="bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50 font-mono rounded-full shadow-lg hover:shadow-xl transition-all"
                 >
                   Contacta con nosotros
                 </Button>

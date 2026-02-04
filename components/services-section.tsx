@@ -70,7 +70,7 @@ export function ServicesSection() {
                 transition={motionConfig.easing.spring}
                 className="h-full"
               >
-                <Card className="group p-8 hover:shadow-2xl transition-all duration-500 border-2 hover:border-accent bg-card h-full flex flex-col">
+                <Card className="group p-8 bg-gradient-to-br from-white/40 via-white/30 to-white/20 backdrop-blur-xl hover:from-white/50 hover:via-white/40 hover:to-white/30 transition-all duration-500 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] h-full flex flex-col rounded-[28px] border border-amber-500/20 hover:border-amber-500/40">
                   {/* Icon */}
                   <div className="mb-6">
                     <m.div
@@ -92,7 +92,7 @@ export function ServicesSection() {
                     <m.div whileHover={{ x: 5 }} transition={{ type: "spring", stiffness: 400 }}>
                       <Button
                         variant="ghost"
-                        className="w-full justify-start px-0 text-accent hover:text-accent hover:bg-accent/10 font-mono text-sm group/btn rounded-xl"
+                        className="w-full justify-center bg-gradient-to-r from-white/40 to-white/30 backdrop-blur-md border border-amber-500/20 hover:border-amber-500/40 text-accent hover:text-accent hover:bg-white/50 font-mono text-sm group/btn rounded-full px-6 py-2 shadow-lg hover:shadow-xl transition-all"
                       >
                         Más información
                         <span className="ml-2 group-hover/btn:translate-x-1 transition-transform">→</span>

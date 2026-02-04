@@ -167,6 +167,62 @@ export default function GestionClasesPage() {
     }
   }
 
+  const handleClearAllBookings = async () => {
+    if (!confirm("¿Estás seguro de que quieres vaciar todas las reservas de todas las clases? Esta acción no se puede deshacer.")) {
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const response = await fetch("/api/admin/classes/clear-bookings", {
+        method: "POST",
+      })
+
+      if (response.ok) {
+        await loadClasses()
+        alert("Todas las reservas han sido eliminadas exitosamente")
+      } else {
+        console.error("Error clearing bookings:", response.statusText)
+        alert("Error al vaciar las reservas")
+      }
+    } catch (error) {
+      console.error("Error clearing bookings:", error)
+      alert("Error al vaciar las reservas")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleDeleteAllClasses = async () => {
+    if (!confirm("¿ADVERTENCIA! ¿Estás seguro de que quieres BORRAR TODAS las clases? Esta acción eliminará todas las clases y todas sus reservas permanentemente y NO se puede deshacer.")) {
+      return
+    }
+
+    if (!confirm("Última confirmación: ¿REALMENTE quieres borrar TODAS las clases del sistema?")) {
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const response = await fetch("/api/admin/classes/delete-all", {
+        method: "DELETE",
+      })
+
+      if (response.ok) {
+        await loadClasses()
+        alert("Todas las clases han sido eliminadas exitosamente")
+      } else {
+        console.error("Error deleting classes:", response.statusText)
+        alert("Error al borrar las clases")
+      }
+    } catch (error) {
+      console.error("Error deleting classes:", error)
+      alert("Error al borrar las clases")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   if (!user || !isManager) {
     return null
   }
@@ -299,13 +355,31 @@ export default function GestionClasesPage() {
                 </Button>
               ))}
             </div>
-            <Button
-              onClick={() => setShowForm(!showForm)}
-              className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              AÑADIR CLASE
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                onClick={() => setShowForm(!showForm)}
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-mono"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                AÑADIR CLASE
+              </Button>
+              <Button
+                onClick={handleClearAllBookings}
+                variant="outline"
+                className="border-2 border-yellow-500/50 text-yellow-600 hover:bg-yellow-500/10 hover:border-yellow-500 font-mono"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                VACIAR CLASES
+              </Button>
+              <Button
+                onClick={handleDeleteAllClasses}
+                variant="outline"
+                className="border-2 border-red-500/50 text-red-600 hover:bg-red-500/10 hover:border-red-500 font-mono"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                BORRAR TODAS
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -315,7 +389,7 @@ export default function GestionClasesPage() {
 
           {/* Create Class Form */}
           {showForm && (
-            <Card className="p-8 mb-8 border-2 border-accent max-w-4xl mx-auto">
+            <Card className="p-8 mb-8 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent backdrop-blur-xl border-2 border-amber-500/30 hover:border-amber-500/50 transition-all duration-300 shadow-[0_20px_50px_rgba(251,191,36,0.15)] rounded-[24px] max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-foreground mb-6">Añadir Nueva Clase</h3>
               <form onSubmit={handleCreateClass} className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-6">

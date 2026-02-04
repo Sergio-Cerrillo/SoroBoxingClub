@@ -136,9 +136,9 @@ export default function DashboardPage() {
           <div className="container mx-auto px-4 space-y-8">
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Ingresos Card */}
-              <Card className="p-6 border-2 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent">
+              <Card className="p-6 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent backdrop-blur-xl border-2 border-amber-500/30 hover:border-amber-500/50 transition-all duration-300 shadow-[0_10px_40px_rgba(251,191,36,0.15)] hover:shadow-[0_15px_50px_rgba(251,191,36,0.25)] rounded-[24px]">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-accent/20 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-accent/20 backdrop-blur-md rounded-xl flex items-center justify-center">
                     <DollarSign className="w-6 h-6 text-accent" />
                   </div>
                   <div className="h-5 w-20 bg-accent/30 rounded animate-pulse" />
@@ -152,9 +152,9 @@ export default function DashboardPage() {
               </Card>
 
               {/* Pagos Card */}
-              <Card className="p-6 border-2 border-green-500/20">
+              <Card className="p-6 bg-gradient-to-br from-green-500/10 via-green-500/5 to-transparent backdrop-blur-xl border-2 border-green-500/30 hover:border-green-500/50 transition-all duration-300 shadow-[0_10px_40px_rgba(34,197,94,0.15)] hover:shadow-[0_15px_50px_rgba(34,197,94,0.25)] rounded-[24px]">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-green-500/20 backdrop-blur-md rounded-xl flex items-center justify-center">
                     <CheckCircle2 className="w-6 h-6 text-green-600" />
                   </div>
                   <div className="h-5 w-16 bg-muted rounded animate-pulse" />
@@ -168,9 +168,9 @@ export default function DashboardPage() {
               </Card>
 
               {/* Pendientes Card */}
-              <Card className="p-6 border-2 border-destructive/20">
+              <Card className="p-6 bg-gradient-to-br from-red-500/10 via-red-500/5 to-transparent backdrop-blur-xl border-2 border-red-500/30 hover:border-red-500/50 transition-all duration-300 shadow-[0_10px_40px_rgba(239,68,68,0.15)] hover:shadow-[0_15px_50px_rgba(239,68,68,0.25)] rounded-[24px]">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-destructive/20 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-destructive/20 backdrop-blur-md rounded-xl flex items-center justify-center">
                     <AlertCircle className="w-6 h-6 text-destructive" />
                   </div>
                   <div className="h-5 w-20 bg-muted rounded animate-pulse" />
@@ -184,9 +184,9 @@ export default function DashboardPage() {
               </Card>
 
               {/* Usuarios Card */}
-              <Card className="p-6 border-2 border-primary/20">
+              <Card className="p-6 bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent backdrop-blur-xl border-2 border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 shadow-[0_10px_40px_rgba(59,130,246,0.15)] hover:shadow-[0_15px_50px_rgba(59,130,246,0.25)] rounded-[24px]">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-md rounded-xl flex items-center justify-center">
                     <Users className="w-6 h-6 text-primary" />
                   </div>
                   <div className="h-5 w-16 bg-muted rounded animate-pulse" />
@@ -202,7 +202,7 @@ export default function DashboardPage() {
 
             {/* Charts Skeleton */}
             <div className="grid lg:grid-cols-2 gap-6">
-              <Card className="p-6">
+              <Card className="p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 shadow-[0_10px_40px_rgba(251,191,36,0.1)] rounded-[24px]">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="h-5 w-5 bg-muted rounded animate-pulse" />
                   <div className="h-6 w-48 bg-muted rounded animate-pulse" />
@@ -210,7 +210,7 @@ export default function DashboardPage() {
                 <div className="h-[250px] bg-muted/30 rounded animate-pulse" />
               </Card>
 
-              <Card className="p-6">
+              <Card className="p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 shadow-[0_10px_40px_rgba(251,191,36,0.1)] rounded-[24px]">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="h-5 w-5 bg-muted rounded animate-pulse" />
                   <div className="h-6 w-32 bg-muted rounded animate-pulse" />
@@ -220,7 +220,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Payment Methods Skeleton */}
-            <Card className="p-6">
+            <Card className="p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 shadow-[0_10px_40px_rgba(251,191,36,0.1)] rounded-[24px]">
               <div className="flex items-center gap-2 mb-6">
                 <div className="h-5 w-5 bg-muted rounded animate-pulse" />
                 <div className="h-6 w-40 bg-muted rounded animate-pulse" />
@@ -240,7 +240,7 @@ export default function DashboardPage() {
             </Card>
 
             {/* User Payments List Skeleton */}
-            <Card className="p-6">
+            <Card className="p-6 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl border-2 border-amber-500/20 hover:border-amber-500/40 transition-all duration-300 shadow-[0_10px_40px_rgba(251,191,36,0.1)] rounded-[24px]">
               <div className="flex items-center gap-2 mb-6">
                 <div className="h-5 w-5 bg-muted rounded animate-pulse" />
                 <div className="h-6 w-48 bg-muted rounded animate-pulse" />

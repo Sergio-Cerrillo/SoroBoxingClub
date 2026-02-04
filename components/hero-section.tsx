@@ -141,26 +141,26 @@ export function HeroSection() {
           </Reveal>
 
           {/* Main Heading con TextReveal word-by-word */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-8 tracking-tight leading-tight">
-            <span className="text-primary-foreground">
+          <h1 className="text-[clamp(1.25rem,5vw,4rem)] sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-8 tracking-tight leading-tight">
+            <span className="inline-block text-primary-foreground whitespace-nowrap">
               <TextReveal delay={0.2} staggerDelay={0.04}>
                 ENTRENA COMO UN
               </TextReveal>
             </span>
             {" "}
-            <span className="text-accent">
+            <span className="inline-block text-accent font-extrabold whitespace-nowrap">
               <TextReveal delay={0.5} staggerDelay={0.04}>
                 CAMPEÓN
               </TextReveal>
             </span>
             <span className="block mt-2">
-              <span className="text-primary-foreground">
+              <span className="inline-block text-primary-foreground whitespace-nowrap">
                 <TextReveal delay={0.8} staggerDelay={0.04}>
                   PELEA COMO UNA
                 </TextReveal>
               </span>
               {" "}
-              <span className="text-accent">
+              <span className="inline-block text-accent font-extrabold whitespace-nowrap">
                 <TextReveal delay={1.1} staggerDelay={0.04}>
                   LEYENDA
                 </TextReveal>
@@ -170,7 +170,7 @@ export function HeroSection() {
 
           {/* Subtitle */}
           <Reveal direction="up" delay={1.4} duration="normal">
-            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-primary-foreground/90 mb-12 font-light max-w-4xl mx-auto leading-relaxed px-4">
+            <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-primary-foreground/90 mb-12 font-medium max-w-4xl mx-auto leading-relaxed px-4">
               Descubre el arte del boxeo en Soro Boxing Club.
               <span className="block mt-2 text-accent/90">Fuerza, técnica y disciplina.</span>
             </p>
@@ -187,7 +187,7 @@ export function HeroSection() {
                 >
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-2xl shadow-accent/30"
+                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-[0_15px_40px_rgba(251,191,36,0.4)] hover:shadow-[0_20px_50px_rgba(251,191,36,0.5)] rounded-full transition-all"
                   >
                     Empecemos
                     <m.span

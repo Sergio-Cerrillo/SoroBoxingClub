@@ -50,7 +50,7 @@ function StatCard({ icon: Icon, value, label, delay }: { icon: any, value: numbe
         whileHover={{ y: -8, scale: 1.05 }}
         transition={motionConfig.easing.spring}
       >
-        <Card className="p-3 lg:p-8 border-2 border-accent/30 hover:border-accent transition-all duration-300 hover:shadow-2xl hover:shadow-accent/50 bg-zinc-900 shadow-lg shadow-accent/20">
+        <Card className="p-3 lg:p-8 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 transition-all duration-300 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] rounded-[28px] border-0">
           <div className="flex flex-col items-center text-center">
             <m.div
               className="w-8 h-8 lg:w-16 lg:h-16 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mb-2 lg:mb-6"

@@ -75,8 +75,9 @@
 }
 
 @theme inline {
-  --font-sans: "Playfair Display", "Georgia", "serif";
-  --font-mono: "Inter", "system-ui", "sans-serif";
+  --font-montserrat: "Montserrat", "system-ui", "-apple-system", "sans-serif";
+  --font-sans: var(--font-montserrat);
+  --font-mono: var(--font-montserrat);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -219,5 +220,36 @@
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-montserrat), system-ui, -apple-system, sans-serif;
+    font-weight: 300;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-montserrat), system-ui, -apple-system, sans-serif;
+  }
+
+  .font-bold {
+    font-weight: 600;
+  }
+
+  .font-light {
+    font-weight: 200;
+  }
+
+  .font-normal {
+    font-weight: 300;
+  }
+
+  .font-medium {
+    font-weight: 400;
+  }
+
+  .font-semibold {
+    font-weight: 500;
   }
 }

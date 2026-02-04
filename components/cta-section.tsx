@@ -4,30 +4,12 @@ import { m } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Phone } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
-import { Reveal, ParallaxScale, TextReveal } from "@/components/motion"
+import { Reveal, TextReveal } from "@/components/motion"
 import { motionConfig } from "@/lib/motion/config"
 
 export function CTASection() {
   return (
     <section className="py-24 lg:py-32 bg-black relative overflow-hidden">
-      {/* Imagen de fondo con parallax */}
-      <ParallaxScale scale={[1, 1.15]}>
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/exterior.jpg"
-            alt="Background"
-            fill
-            className="object-cover"
-            priority={false}
-          />
-          {/* Overlay oscuro */}
-          <div className="absolute inset-0 bg-black/80" />
-          {/* Degradado inferior de transparente a negro */}
-          <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-black/70 to-black" />
-        </div>
-      </ParallaxScale>
-
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
           <Reveal direction="scale" delay={0.1}>
@@ -63,7 +45,7 @@ export function CTASection() {
                 >
                   <Button
                     size="lg"
-                    className="w-full sm:w-auto bg-accent text-accent-foreground hover:bg-accent/90 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-2xl shadow-accent/50"
+                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50 text-base md:text-lg px-8 md:px-12 py-6 md:py-7 font-mono tracking-wider group shadow-[0_15px_40px_rgba(251,191,36,0.4)] hover:shadow-[0_20px_50px_rgba(251,191,36,0.5)] rounded-full transition-all"
                   >
                     EMPEZAR HOY
                     <m.span

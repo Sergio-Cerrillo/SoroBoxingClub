@@ -29,6 +29,7 @@ export function Navigation() {
     { href: "/entrenadores", label: "ENTRENADORES" },
     { href: "/galeria", label: "GALERÍA" },
     { href: "/cuotas", label: "CUOTAS" },
+    { href: "/contacto", label: "CONTACTO" },
   ]
 
   return (
@@ -36,184 +37,225 @@ export function Navigation() {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: motionConfig.easing.easeOut }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "bg-primary/95 backdrop-blur-lg shadow-2xl" : "bg-transparent"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center gap-3 group">
-            <m.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
-              <Image
-                src="/logo.png"
-                alt="Soro Boxing Club"
-                width={120}
-                height={40}
-                className="object-contain"
-                priority
-              />
-            </m.div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link, index) => (
-              <m.div
-                key={link.href}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.1, duration: 0.4 }}
-              >
-                <Link
-                  href={link.href}
-                  className={`font-mono text-sm tracking-widest hover:text-accent transition-all duration-300 relative group ${pathname === link.href ? "text-accent" : "text-primary-foreground"
-                    }`}
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-center">
+          {/* Main Navigation Container - Centered with logo and all links */}
+          <div
+            className={`flex items-center gap-6 h-16 px-6 rounded-full transition-all duration-500 ${isScrolled
+                ? "bg-gradient-to-r from-black/60 via-black/50 to-black/60 backdrop-blur-xl shadow-[0_8px_32px_rgba(251,191,36,0.15)] border border-amber-500/20"
+                : "bg-gradient-to-r from-black/40 via-black/30 to-black/40 backdrop-blur-lg border border-white/10"
+              }`}
+          >
+            {/* Left Links - INICIO, ENTRENADORES, GALERÍA */}
+            <div className="hidden lg:flex items-center gap-6">
+              {navLinks.slice(0, 3).map((link, index) => (
+                <m.div
+                  key={link.href}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + index * 0.1, duration: 0.4 }}
                 >
-                  {link.label}
-                  {pathname === link.href && (
-                    <m.span
-                      layoutId="activeIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent/50 transition-all duration-300 group-hover:w-full" />
-                </Link>
-              </m.div>
-            ))}
+                  <Link
+                    href={link.href}
+                    className={`font-mono text-sm tracking-widest hover:text-accent transition-all duration-300 relative group px-4 py-2 rounded-full ${pathname === link.href
+                        ? "text-accent bg-white/10"
+                        : "text-white/90 hover:bg-white/5"
+                      }`}
+                  >
+                    {link.label}
+                  </Link>
+                </m.div>
+              ))}
+            </div>
 
-            {isAuthenticated ? (
-              <m.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="flex items-center gap-3"
-              >
-                {isManager && (
-                  <Link href="/gestion">
-                    <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {/* Center - Logo */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <m.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
+                <Image
+                  src="/logo.png"
+                  alt="Soro Boxing Club"
+                  width={120}
+                  height={40}
+                  className="object-contain"
+                  priority
+                />
+              </m.div>
+            </Link>
+
+            {/* Right Links - CUOTAS, CONTACTO */}
+            <div className="hidden lg:flex items-center gap-6">
+              {navLinks.slice(3, 5).map((link, index) => (
+                <m.div
+                  key={link.href}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 + index * 0.1, duration: 0.4 }}
+                >
+                  <Link
+                    href={link.href}
+                    className={`font-mono text-sm tracking-widest hover:text-accent transition-all duration-300 relative group px-4 py-2 rounded-full ${pathname === link.href
+                        ? "text-accent bg-white/10"
+                        : "text-white/90 hover:bg-white/5"
+                      }`}
+                  >
+                    {link.label}
+                  </Link>
+                </m.div>
+              ))}
+            </div>
+
+            {/* Auth Section - Inside main container */}
+            <div className="hidden lg:flex items-center gap-3">
+              {isAuthenticated ? (
+                <m.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="flex items-center gap-2"
+                >
+                  {isManager && (
+                    <Link href="/gestion">
+                      <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <Button
+                          variant="ghost"
+                          className="relative bg-gradient-to-r from-amber-500/15 via-yellow-600/10 to-amber-500/15 backdrop-blur-md border-2 border-amber-500/40 text-amber-400 hover:text-amber-300 hover:border-amber-400/60 font-mono tracking-widest transition-all duration-300 shadow-[0_0_10px_rgba(251,191,36,0.15)] hover:shadow-[0_0_20px_rgba(251,191,36,0.3),0_0_40px_rgba(251,191,36,0.15)] rounded-full h-10 px-4 overflow-hidden group"
+                        >
+                          <span className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                          <Shield className="w-4 h-4 mr-2 relative z-10" />
+                          <span className="relative z-10">GESTIÓN</span>
+                        </Button>
+                      </m.div>
+                    </Link>
+                  )}
+                  <Link href="/perfil">
+                    <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       <Button
-                        variant="outline"
-                        className="border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-mono tracking-wide transition-all bg-transparent"
+                        variant="ghost"
+                        className="relative bg-gradient-to-r from-white/15 via-white/10 to-white/15 backdrop-blur-md border-2 border-white/40 text-white hover:text-white hover:border-white/60 font-mono tracking-widest transition-all duration-300 shadow-[0_0_10px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2),0_0_40px_rgba(255,255,255,0.1)] rounded-full h-10 px-4 overflow-hidden group"
                       >
-                        <Shield className="w-4 h-4 mr-2" />
-                        GESTIÓN
+                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                        <User className="w-4 h-4 mr-2 relative z-10" />
+                        <span className="relative z-10">{user?.first_name?.toUpperCase() || user?.dni || 'PERFIL'}</span>
                       </Button>
                     </m.div>
                   </Link>
-                )}
-                <Link href="/perfil">
-                  <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button
-                      variant="outline"
-                      className="border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-mono tracking-wide transition-all bg-transparent"
+                </m.div>
+              ) : (
+                <m.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Link href="/login">
+                    <m.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="relative"
                     >
-                      <User className="w-4 h-4 mr-2" />
-                      {user?.first_name?.toUpperCase() || user?.dni || 'PERFIL'}
-                    </Button>
-                  </m.div>
-                </Link>
-              </m.div>
-            ) : (
-              <m.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <Link href="/login">
-                  <m.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-mono tracking-wide transition-all shadow-lg shadow-accent/20">
-                      <LogIn className="w-4 h-4 mr-2" />
-                      INICIAR SESIÓN
-                    </Button>
-                  </m.div>
-                </Link>
-              </m.div>
-            )}
-          </div>
+                      <Button className="relative bg-gradient-to-r from-amber-500/15 via-yellow-600/10 to-amber-500/15 backdrop-blur-md border-2 border-amber-500/40 text-amber-400 hover:text-amber-300 hover:border-amber-400/60 font-mono tracking-widest transition-all duration-300 shadow-[0_0_10px_rgba(251,191,36,0.15)] hover:shadow-[0_0_20px_rgba(251,191,36,0.3),0_0_40px_rgba(251,191,36,0.15)] rounded-full h-10 px-6 overflow-hidden group">
+                        <span className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/5 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                        <LogIn className="w-4 h-4 mr-2 relative z-10" />
+                        <span className="relative z-10">ACCEDER</span>
+                      </Button>
+                    </m.div>
+                  </Link>
+                </m.div>
+              )}
+            </div>
 
-          {/* Mobile Menu Button */}
-          <m.button
-            className="lg:hidden text-primary-foreground"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            whileTap={{ scale: 0.9 }}
-          >
-            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </m.button>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <m.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden bg-primary/95 backdrop-blur-lg border-t border-border overflow-hidden"
+            {/* Mobile Menu Button */}
+            <m.button
+              className="lg:hidden text-primary-foreground ml-auto"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              whileTap={{ scale: 0.9 }}
             >
-              <div className="flex flex-col gap-6 py-6">
-                {navLinks.map((link, index) => (
-                  <m.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className={`font-mono text-sm tracking-wide hover:text-accent transition-colors ${pathname === link.href ? "text-accent" : "text-primary-foreground"
-                        }`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  </m.div>
-                ))}
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </m.button>
+          </div>
+        </div>
+      </div>
 
-                {!loading && (
-                  <m.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    {isAuthenticated ? (
-                      <>
-                        {isManager && (
-                          <Link href="/gestion" onClick={() => setIsMobileMenuOpen(false)}>
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <m.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden"
+          >
+            <div className="mt-4 px-4">
+              <div className="bg-gradient-to-br from-black/60 via-black/50 to-black/60 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-6 shadow-[0_8px_32px_rgba(251,191,36,0.15)]">
+                <div className="flex flex-col gap-4">
+                  {navLinks.map((link, index) => (
+                    <m.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Link
+                        href={link.href}
+                        className={`font-mono text-sm tracking-wide transition-all px-4 py-2 rounded-full ${pathname === link.href
+                            ? "text-accent bg-white/10"
+                            : "text-white/90 hover:bg-white/5 hover:text-accent"
+                          }`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </m.div>
+                  ))}
+
+                  {!loading && (
+                    <m.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="pt-4 border-t border-white/10"
+                    >
+                      {isAuthenticated ? (
+                        <>
+                          {isManager && (
+                            <Link href="/gestion" onClick={() => setIsMobileMenuOpen(false)}>
+                              <Button
+                                variant="ghost"
+                                className="w-full bg-white/10 backdrop-blur-md border border-amber-500/20 text-white hover:bg-white/20 hover:border-amber-500/40 font-mono tracking-wide mb-3 rounded-full"
+                              >
+                                <Shield className="w-4 h-4 mr-2" />
+                                GESTIÓN
+                              </Button>
+                            </Link>
+                          )}
+                          <Link href="/perfil" onClick={() => setIsMobileMenuOpen(false)}>
                             <Button
-                              variant="outline"
-                              className="w-full border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-mono tracking-wide bg-transparent mb-3"
+                              variant="ghost"
+                              className="w-full bg-white/10 backdrop-blur-md border border-amber-500/20 text-white hover:bg-white/20 hover:border-amber-500/40 font-mono tracking-wide rounded-full"
                             >
-                              <Shield className="w-4 h-4 mr-2" />
-                              GESTIÓN
+                              <User className="w-4 h-4 mr-2" />
+                              MI PERFIL
                             </Button>
                           </Link>
-                        )}
-                        <Link href="/perfil" onClick={() => setIsMobileMenuOpen(false)}>
-                          <Button
-                            variant="outline"
-                            className="w-full border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-mono tracking-wide bg-transparent"
-                          >
-                            <User className="w-4 h-4 mr-2" />
-                            MI PERFIL
+                        </>
+                      ) : (
+                        <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Button className="bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50 font-mono tracking-wide w-full rounded-full shadow-lg">
+                            <LogIn className="w-4 h-4 mr-2" />
+                            INICIAR SESIÓN
                           </Button>
                         </Link>
-                      </>
-                    ) : (
-                      <Link href="/login" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-mono tracking-wide w-full">
-                          <LogIn className="w-4 h-4 mr-2" />
-                          INICIAR SESIÓN
-                        </Button>
-                      </Link>
-                    )}
-                  </m.div>
-                )}
+                      )}
+                    </m.div>
+                  )}
+                </div>
               </div>
-            </m.div>
-          )}
-        </AnimatePresence>
-      </div>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
     </m.nav>
   )
 }

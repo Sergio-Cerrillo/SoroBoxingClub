@@ -121,7 +121,7 @@ export default function GaleriaPage() {
                 {instalaciones.map((item, index) => (
                   <Card
                     key={index}
-                    className="group overflow-hidden bg-zinc-900 border-accent/30 hover:border-accent transition-all duration-300 cursor-pointer shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/50"
+                    className="group overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 transition-all duration-300 cursor-pointer shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] rounded-[28px] border-0"
                   >
                     <div className="relative h-64 overflow-hidden">
                       <img
@@ -144,7 +144,7 @@ export default function GaleriaPage() {
                 {pesas.map((item, index) => (
                   <Card
                     key={index}
-                    className="group overflow-hidden bg-zinc-900 border-accent/30 hover:border-accent transition-all duration-300 cursor-pointer shadow-lg shadow-accent/20 hover:shadow-2xl hover:shadow-accent/50"
+                    className="group overflow-hidden bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 transition-all duration-300 cursor-pointer shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] rounded-[28px] border-0"
                   >
                     <div className="relative h-64 overflow-hidden">
                       <img

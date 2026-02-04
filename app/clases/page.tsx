@@ -138,14 +138,19 @@ export default function ClasesPage() {
 
   // Agrupar clases por día
   const classesByDay: Record<string, Class[]> = {}
+
+  // Inicializar todos los días de la semana
+  const allDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+  allDays.forEach(day => {
+    classesByDay[day] = []
+  })
+
+  // Agregar las clases existentes
   classes.forEach((classItem) => {
     const date = new Date(classItem.starts_at)
     const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
     const dayName = dayNames[date.getDay()]
 
-    if (!classesByDay[dayName]) {
-      classesByDay[dayName] = []
-    }
     classesByDay[dayName].push(classItem)
   })
 
@@ -178,11 +183,6 @@ export default function ClasesPage() {
     }
     return `${mins}min`
   }
-
-  const days = Object.keys(classesByDay).sort((a, b) => {
-    const dayOrder = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
-    return dayOrder.indexOf(a) - dayOrder.indexOf(b)
-  })
 
   const filteredClasses = classesByDay[selectedDay] || []
 
@@ -235,117 +235,127 @@ export default function ClasesPage() {
           ) : (
             <>
               {/* Filtros por día */}
-              {days.length > 0 && (
-                <div className="mb-8">
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {days.map((day) => (
-                      <Button
-                        key={day}
-                        onClick={() => setSelectedDay(day)}
-                        variant={selectedDay === day ? "default" : "outline"}
-                        className={selectedDay === day ? "bg-accent text-black hover:bg-accent/90" : ""}
-                      >
-                        {day} ({classesByDay[day].length})
-                      </Button>
-                    ))}
-                  </div>
+              <div className="mb-8">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {allDays.map((day) => (
+                    <Button
+                      key={day}
+                      onClick={() => setSelectedDay(day)}
+                      variant={selectedDay === day ? "default" : "outline"}
+                      className={selectedDay === day ? "bg-accent text-black hover:bg-accent/90" : ""}
+                    >
+                      {day} ({classesByDay[day]?.length || 0})
+                    </Button>
+                  ))}
                 </div>
-              )}
+              </div>
 
               {/* Grid de clases */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredClasses.map((classItem) => {
-                  const userBooking = classItem.bookings?.find(
-                    (b) => b.profile_id === user?.id && b.status === 'active'
-                  )
-                  const currentBookings = classItem.bookings?.filter((b) => b.status === 'active').length || 0
-                  const spotsLeft = classItem.capacity - currentBookings
-                  const isFull = spotsLeft <= 0
+                {filteredClasses.length === 0 ? (
+                  <div className="col-span-full">
+                    <Card className="p-12 text-center">
+                      <Calendar className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+                      <h3 className="text-xl font-bold mb-2">No hay clases este día</h3>
+                      <p className="text-muted-foreground">
+                        No hay clases programadas para {selectedDay}. Selecciona otro día para ver clases disponibles.
+                      </p>
+                    </Card>
+                  </div>
+                ) : (
+                  filteredClasses.map((classItem) => {
+                    const userBooking = classItem.bookings?.find(
+                      (b) => b.profile_id === user?.id && b.status === 'active'
+                    )
+                    const currentBookings = classItem.bookings?.filter((b) => b.status === 'active').length || 0
+                    const spotsLeft = classItem.capacity - currentBookings
+                    const isFull = spotsLeft <= 0
 
-                  return (
-                    <Card key={classItem.id} className="p-6 hover:border-accent/50 transition-all">
-                      <div className="space-y-4">
-                        {/* Header */}
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="text-xl font-bold mb-1">{classItem.title}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {formatDate(classItem.starts_at)}
-                            </p>
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            <Badge variant="outline" className="ml-2">
-                              {classItem.status === 'active' ? 'Activa' : 'Cancelada'}
-                            </Badge>
-                            {userBooking && (
-                              <Badge className="bg-accent text-black">
-                                Inscrito
+                    return (
+                      <Card key={classItem.id} className="p-6 hover:border-accent/50 transition-all">
+                        <div className="space-y-4">
+                          {/* Header */}
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <h3 className="text-xl font-bold mb-1">{classItem.title}</h3>
+                              <p className="text-sm text-muted-foreground">
+                                {formatDate(classItem.starts_at)}
+                              </p>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <Badge variant="outline" className="ml-2">
+                                {classItem.status === 'active' ? 'Activa' : 'Cancelada'}
                               </Badge>
+                              {userBooking && (
+                                <Badge className="bg-accent text-black">
+                                  Inscrito
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Info */}
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-2 text-sm">
+                              <Clock className="w-4 h-4 text-accent" />
+                              <span className="font-mono">
+                                {formatTime(classItem.starts_at)} ({formatDuration(classItem.duration_minutes)})
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-sm">
+                              <UserIcon className="w-4 h-4 text-accent" />
+                              <span>
+                                <span className="font-semibold">{classItem.professor}</span>
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-2 text-sm">
+                              <Users className="w-4 h-4 text-accent" />
+                              <span>
+                                {currentBookings}/{classItem.capacity} •
+                                <span className={`font-semibold ml-1 ${isFull ? 'text-red-500' : spotsLeft <= 3 ? 'text-yellow-500' : 'text-green-500'
+                                  }`}>
+                                  {isFull ? 'Completa' : `${spotsLeft} ${spotsLeft === 1 ? 'plaza' : 'plazas'}`}
+                                </span>
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Action buttons */}
+                          <div className="pt-4">
+                            {classItem.status === 'active' ? (
+                              userBooking ? (
+                                <Button
+                                  className="w-full"
+                                  variant="destructive"
+                                  onClick={() => handleCancelBooking(classItem.id)}
+                                >
+                                  Cancelar Reserva
+                                </Button>
+                              ) : isFull ? (
+                                <Button className="w-full" variant="outline" disabled>
+                                  Clase Completa
+                                </Button>
+                              ) : (
+                                <Button
+                                  className="w-full bg-accent text-black hover:bg-accent/90"
+                                  onClick={() => handleBookClass(classItem.id)}
+                                >
+                                  Reservar Plaza
+                                </Button>
+                              )
+                            ) : (
+                              <Button className="w-full" variant="outline" disabled>
+                                Clase cancelada
+                              </Button>
                             )}
                           </div>
                         </div>
-
-                        {/* Info */}
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 text-sm">
-                            <Clock className="w-4 h-4 text-accent" />
-                            <span className="font-mono">
-                              {formatTime(classItem.starts_at)} ({formatDuration(classItem.duration_minutes)})
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-sm">
-                            <UserIcon className="w-4 h-4 text-accent" />
-                            <span>
-                              <span className="font-semibold">{classItem.professor}</span>
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2 text-sm">
-                            <Users className="w-4 h-4 text-accent" />
-                            <span>
-                              {currentBookings}/{classItem.capacity} •
-                              <span className={`font-semibold ml-1 ${isFull ? 'text-red-500' : spotsLeft <= 3 ? 'text-yellow-500' : 'text-green-500'
-                                }`}>
-                                {isFull ? 'Completa' : `${spotsLeft} ${spotsLeft === 1 ? 'plaza' : 'plazas'}`}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Action buttons */}
-                        <div className="pt-4">
-                          {classItem.status === 'active' ? (
-                            userBooking ? (
-                              <Button
-                                className="w-full"
-                                variant="destructive"
-                                onClick={() => handleCancelBooking(classItem.id)}
-                              >
-                                Cancelar Reserva
-                              </Button>
-                            ) : isFull ? (
-                              <Button className="w-full" variant="outline" disabled>
-                                Clase Completa
-                              </Button>
-                            ) : (
-                              <Button
-                                className="w-full bg-accent text-black hover:bg-accent/90"
-                                onClick={() => handleBookClass(classItem.id)}
-                              >
-                                Reservar Plaza
-                              </Button>
-                            )
-                          ) : (
-                            <Button className="w-full" variant="outline" disabled>
-                              Clase cancelada
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  )
-                })}
+                      </Card>
+                    )
+                  })
+                )}
               </div>
             </>
           )}

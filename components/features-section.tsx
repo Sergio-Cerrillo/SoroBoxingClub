@@ -82,7 +82,7 @@ export function FeaturesSection() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group p-8 lg:p-10 bg-primary-foreground/5 backdrop-blur-sm border-2 border-primary-foreground/10 hover:border-accent hover:bg-primary-foreground/10 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-accent/20 animate-scale-in"
+              className="group p-8 lg:p-10 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 transition-all duration-500 hover:scale-105 shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)] animate-scale-in rounded-[28px] border-0"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               {/* Icon */}
