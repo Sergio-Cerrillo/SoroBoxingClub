@@ -131,8 +131,10 @@ export default function GestionUsuariosPage() {
     }
 
     try {
-      const response = await fetch(`/api/admin/users/${userId}`, {
-        method: 'DELETE',
+      const response = await fetch('/api/admin/delete-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
       })
 
       if (response.ok) {
@@ -185,8 +187,10 @@ export default function GestionUsuariosPage() {
 
   const handleActivate = async (userId: string) => {
     try {
-      const response = await fetch(`/api/admin/users/${userId}/activate`, {
+      const response = await fetch('/api/admin/activate-user', {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
       })
 
       if (response.ok) {
