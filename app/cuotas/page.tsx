@@ -59,7 +59,6 @@ export default function CuotasPage() {
     { servicio: "Clase individual (1 hora)", icon: User, descripcion: "Entrenamiento personalizado 1 a 1 adaptado a tus objetivos" },
     { servicio: "Pack 5 clases individuales", icon: Users2, descripcion: "Mejora tu técnica con sesiones personalizadas", destacado: true },
     { servicio: "Pack 10 clases individuales", icon: Calendar, descripcion: "Máxima dedicación para resultados profesionales", destacado: true },
-    { servicio: "Plan nutricional personalizado", icon: Apple, descripcion: "Optimiza tu rendimiento con una dieta personalizada" },
   ]
 
   return (
@@ -109,8 +108,8 @@ export default function CuotasPage() {
                 <Card
                   key={index}
                   className={`relative overflow-hidden p-8 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-xl hover:from-white/15 hover:via-white/10 hover:to-white/5 ${plan.popular
-                      ? "shadow-[0_20px_70px_rgba(251,191,36,0.3)] hover:shadow-[0_30px_90px_rgba(251,191,36,0.4)] scale-105"
-                      : "shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)]"
+                    ? "shadow-[0_20px_70px_rgba(251,191,36,0.3)] hover:shadow-[0_30px_90px_rgba(251,191,36,0.4)] scale-105"
+                    : "shadow-[0_20px_50px_rgba(251,191,36,0.15)] hover:shadow-[0_20px_70px_rgba(251,191,36,0.25)]"
                     } transition-all duration-300 rounded-[28px] border-0`}
                 >
                   {plan.popular && (
@@ -143,8 +142,8 @@ export default function CuotasPage() {
 
                   <Button
                     className={`w-full font-mono rounded-full shadow-lg hover:shadow-xl transition-all ${plan.popular
-                        ? "bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50"
-                        : "bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border border-amber-500/20 text-white hover:from-white/30 hover:to-white/20 hover:border-amber-500/40"
+                      ? "bg-gradient-to-r from-amber-500/90 to-yellow-600/90 backdrop-blur-md border border-amber-400/30 text-accent-foreground hover:from-amber-500 hover:to-yellow-600 hover:border-amber-400/50"
+                      : "bg-gradient-to-r from-white/20 to-white/10 backdrop-blur-md border border-amber-500/20 text-white hover:from-white/30 hover:to-white/20 hover:border-amber-500/40"
                       }`}
                     size="lg"
                     asChild
@@ -174,7 +173,7 @@ export default function CuotasPage() {
               <p className="text-gray-400 text-lg font-mono">Lleva tu entrenamiento al siguiente nivel</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {serviciosExtra.map((item, index) => {
                 const IconComponent = item.icon
                 return (
