@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { supabaseAdmin } from "@/lib/supabase-admin"
+import { verifyAdminSession } from "@/lib/auth-admin"
 
 /**
  * GET /api/admin/bookings
@@ -8,27 +8,13 @@ import { supabaseAdmin } from "@/lib/supabase-admin"
  */
 export async function GET(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const sessionToken = cookieStore.get('session_token')?.value
-
-    if (!sessionToken) {
+    const adminSession = await verifyAdminSession()
+    if (!adminSession) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
     }
 
-    // Verificar sesión y que sea manager
-    const { data: session } = await supabaseAdmin
-      .from('user_sessions')
-      .select('user_id, profiles!inner(role)')
-      .eq('session_token_hash', sessionToken)
-      .gte('expires_at', new Date().toISOString())
-      .single()
-
-    if (!session || session.profiles?.role !== 'manager') {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
-    }
-
     // Obtener total de reservas activas (no canceladas)
-    const { data: bookings, error } = await supabaseAdmin
+    const { count, error } = await supabaseAdmin
       .from('class_bookings')
       .select('id', { count: 'exact', head: true })
       .is('cancelled_at', null)
@@ -39,7 +25,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ 
-      total: bookings || 0,
+      total: count || 0,
       success: true 
     })
   } catch (error) {
