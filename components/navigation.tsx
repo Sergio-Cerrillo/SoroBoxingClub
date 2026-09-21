@@ -26,6 +26,7 @@ export function Navigation() {
 
   const navLinks = [
     { href: "/", label: "INICIO" },
+    { href: "/#velada", label: "VELADA" },
     { href: "/entrenadores", label: "ENTRENADORES" },
     { href: "/galeria", label: "GALERÍA" },
     { href: "/cuotas", label: "CUOTAS" },
@@ -48,7 +49,7 @@ export function Navigation() {
                 : "bg-gradient-to-r from-black/40 via-black/30 to-black/40 backdrop-blur-lg border border-white/10"
               }`}
           >
-            {/* Left Links - INICIO, ENTRENADORES, GALERÍA */}
+            {/* Left Links - INICIO, VELADA, ENTRENADORES */}
             <div className="hidden lg:flex items-center gap-6">
               {navLinks.slice(0, 3).map((link, index) => (
                 <m.div
@@ -84,9 +85,9 @@ export function Navigation() {
               </m.div>
             </Link>
 
-            {/* Right Links - CUOTAS, CONTACTO */}
+            {/* Right Links - GALERÍA, CUOTAS, CONTACTO */}
             <div className="hidden lg:flex items-center gap-6">
-              {navLinks.slice(3, 5).map((link, index) => (
+              {navLinks.slice(3, 6).map((link, index) => (
                 <m.div
                   key={link.href}
                   initial={{ opacity: 0, y: -20 }}

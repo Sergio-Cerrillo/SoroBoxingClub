@@ -6,12 +6,14 @@ import { TestimonialsSection } from "@/components/testimonials-section"
 import { CTASection } from "@/components/cta-section"
 import { Footer } from "@/components/footer"
 import { StatsSection } from "@/components/stats-section"
+import { EventSection } from "@/components/event-section"
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       <Navigation />
       <HeroSection />
+      <EventSection />
       <StatsSection />
       <ServicesSection />
       <FeaturesSection />
