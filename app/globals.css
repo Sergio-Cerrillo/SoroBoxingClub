@@ -253,3 +253,11 @@
     font-weight: 500;
   }
 }
+
+/* Background playback uses only the separate sound button in the hero. */
+.hero-background-video::-webkit-media-controls,
+.hero-background-video::-webkit-media-controls-enclosure,
+.hero-background-video::-webkit-media-controls-panel,
+.hero-background-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}

@@ -8,111 +8,71 @@ import { Reveal, TextReveal, ParallaxOpacity } from "@/components/motion"
 import { motionConfig } from "@/lib/motion/config"
 import { useState, useRef, useEffect } from "react"
 
-declare global {
-  interface Window {
-    YT: any;
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
-
 export function HeroSection() {
   const [isMuted, setIsMuted] = useState(true)
-  const [player, setPlayer] = useState<any>(null)
-  const playerRef = useRef<HTMLDivElement>(null)
-  const [isApiReady, setIsApiReady] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
-    // Evitar duplicar el script
-    if (document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-      if (window.YT && window.YT.Player) {
-        setIsApiReady(true)
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    const context = canvas?.getContext("2d", { alpha: false })
+    if (!video || !canvas || !context) return
+
+    // Paint only video frames into the decorative background. Browser media
+    // controls cannot be composited over this canvas, even on WebKit.
+    let animationFrame = 0
+    let previousTime = -1
+    const drawFrame = () => {
+      if (video.readyState >= 2 && video.currentTime !== previousTime) {
+        const width = Math.min(video.videoWidth, 1280)
+        const height = Math.round(width * video.videoHeight / video.videoWidth)
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width
+          canvas.height = height
+        }
+        context.drawImage(video, 0, 0, width, height)
+        previousTime = video.currentTime
       }
-      return
+      animationFrame = requestAnimationFrame(drawFrame)
     }
-
-    // Cargar la API de YouTube
-    const tag = document.createElement('script')
-    tag.src = 'https://www.youtube.com/iframe_api'
-    tag.async = true
-    const firstScriptTag = document.getElementsByTagName('script')[0]
-    firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag)
-
-    // Configurar callback global
-    window.onYouTubeIframeAPIReady = () => {
-      setIsApiReady(true)
-    }
+    animationFrame = requestAnimationFrame(drawFrame)
+    return () => cancelAnimationFrame(animationFrame)
   }, [])
 
-  useEffect(() => {
-    if (!isApiReady || !playerRef.current || player) return
-
-    const newPlayer = new window.YT.Player(playerRef.current, {
-      videoId: 'J_PQCSPZvWk',
-      playerVars: {
-        autoplay: 1,
-        mute: 1,
-        controls: 0,
-        loop: 1,
-        playlist: 'J_PQCSPZvWk',
-        modestbranding: 1,
-        showinfo: 0,
-        rel: 0,
-        disablekb: 1,
-        fs: 0,
-        iv_load_policy: 3,
-        playsinline: 1,
-        enablejsapi: 1,
-      },
-      events: {
-        onReady: (event: any) => {
-          event.target.playVideo()
-          event.target.mute()
-        },
-        onStateChange: (event: any) => {
-          // Si el video se pausa, reanudarlo
-          if (event.data === window.YT.PlayerState.PAUSED) {
-            event.target.playVideo()
-          }
-          // Si el video termina, reiniciarlo
-          if (event.data === window.YT.PlayerState.ENDED) {
-            event.target.playVideo()
-          }
-        }
-      }
-    })
-    setPlayer(newPlayer)
-  }, [isApiReady, player])
-
   const toggleMute = () => {
-    if (player && player.isMuted !== undefined) {
-      const currentlyMuted = player.isMuted()
-      if (currentlyMuted) {
-        player.unMute()
-        setIsMuted(false)
-      } else {
-        player.mute()
-        setIsMuted(true)
-      }
-    }
+    const video = videoRef.current
+    if (!video) return
+    video.muted = !video.muted
+    setIsMuted(video.muted)
   }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary">
-      <ParallaxOpacity range={[0.3, 1]}>
+      <ParallaxOpacity range={[0.3, 1]} className="absolute inset-0 z-0">
         <div className="absolute inset-0 z-0">
-          {/* YouTube video background */}
-          <div className="absolute inset-0 w-full h-full overflow-hidden">
-            <div
-              ref={playerRef}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-60 scale-[1.5]"
-              style={{
-                width: '177.77777778vh',
-                height: '56.25vw',
-                minWidth: '100vw',
-                minHeight: '100vh'
-              }}
-            />
-          </div>
+          <video
+            ref={videoRef}
+            className="hero-background-video absolute top-0 left-0 h-px w-px opacity-0 pointer-events-none"
+            src="/videos/hero-background.mp4"
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+            preload="auto"
+            aria-hidden="true"
+            tabIndex={-1}
+            onVolumeChange={(event) => setIsMuted(event.currentTarget.muted)}
+          />
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0 h-full w-full object-cover opacity-60 pointer-events-none"
+            aria-hidden="true"
+          />
           {/* Degradado inferior a negro */}
           <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-b from-transparent via-black/70 to-black z-10" />
         </div>
@@ -120,9 +80,11 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="container mx-auto px-4 lg:px-8 z-20 text-center pt-20">
-        {/* Botón de sonido */}
         <m.button
+          type="button"
           onClick={toggleMute}
+          aria-label={isMuted ? "Activar sonido del vídeo de fondo" : "Silenciar vídeo de fondo"}
+          aria-pressed={!isMuted}
           className="fixed top-24 right-8 z-50 p-4 rounded-full bg-accent/90 hover:bg-accent text-accent-foreground backdrop-blur-sm shadow-lg transition-colors"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
